@@ -1,0 +1,13 @@
+.formLogin{
+  width: 100%;
+  max-width: 30rem;
+  margin: 10rem auto;
+  display: flex;
+  padding: 5rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: cadetblue;
+  border-radius: 1rem;
+}
+
