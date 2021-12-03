@@ -3,66 +3,64 @@ import {useState, useEffect} from "react";
 import {Login} from './Components/Login'
 import {ClientList} from './Components/ClientList'
 import bd from './services/services'
-const md5 = require('md5');
+import { NavBar } from './Components/NavBar';
+
 
 function App() {
   const [loged, setLoged] = useState(false);
-  const [loginData, setLoginData] = useState({
-    name: '',
-    pass: ''
-  });
   const [codUser, setCodUser] = useState(null);
-  const [reload, setReload] = useState(true);
-  const [msg, setMsg] = useState('');
+  const [reload, setReload] = useState(false);
+  const [action, setAction] = useState(0);
+  const [codClient, setCodClient] = useState();
+  const [clients, setClients] = useState();
 
-  const handleLogin = (nombre, passwd) =>{
-    //añado los datos al login
-    setLoginData({
-      name: nombre,
-      pass: passwd
-    })
-    console.log("Login data:",loginData)
-    if(loginData.name && loginData.pass){
-      console.log("LLENo")
-      comprobeLogin();
-      
-    }
+  const handleLoged = (bool, cod_user) => {
+    setCodUser(cod_user);
+    console.log('handleloged codUser: ' + codUser);
+    //CARGO TODOS LOS CLIENTES
+    handleGetAllClientByUser(codUser);
+    setLoged(bool);
+    setReload(true);
   }
-  
-  const comprobeLogin = () => {
-    console.log(md5(loginData.pass));
-    //Obtengo todos los trabajadores
-    bd.aGetTrabajadoresLogin().then((res) => {
-      console.log(res.data);
-      //recoroo todos los trabajadores y compruebo si coinciden las introducidas con las de la bd
-      for(let i = 0; i < res.data.length; i++){
-        console.log("namebd: ", res.data[i].name);
-        console.log("name: ", loginData.name)
-        console.log("passbd: ",res.data[i].pass)
-        console.log("pass: ", md5(loginData.pass))
-        if(res.data[i].name===loginData.name && res.data[i].pass===md5(loginData.pass)){
-          console.log(res.data[i].cod_user);
-          setCodUser(res.data[i].cod_user);
-          setLoged(true);
-          //setReload(true);
-          break;
-        }
+  const handleAction = (action, cod_client) => {
+    setCodClient(cod_client)
+    setAction(action);
+    setReload(true);
+  }
+
+  const handleDeleteClient = (cod_client) => {
+    const confirm = window.confirm("¿Está seguro que desea eliminar el registro con cod: "+cod_client+"?");
+      if(confirm){
+        bd.delClientByCod(cod_client).then((res) => {
+          window.alert("Registro: ", res.data, " eliminado correctamente");
+        })
       }
-    });
-    console.log(codUser);
+    }
+  
+    const handleGetAllClientByUser = (cod_user) => {
+      console.log("COD USER PARA BUSCAR CLIENTES: "+cod_user)
+          bd.aGetClients(cod_user).then((res) => {
+          console.log(res.data);
+          //meto los actores en el array de actores
+          setClients(res.data);
+          })
+      
   }
 
+  
   //ESTO SIRVE PARA QUE SE CARGE LA PRIMERA VEZ
   useEffect(() => {
-    
-      setReload(false);
-    
+    console.log('useEffect, LOGED: ',loged);
+    console.log('useEffect, coduser: ',codUser);
+    handleGetAllClientByUser(codUser);
+    setReload(false);
     //le paso una variable, si esta a true, recarga, y si no no recarga
   }, [reload]);
   
   return (
     <>
-    { !loged ? <Login onLogin={handleLogin}/> : <ClientList id={1}/> }
+    <NavBar title="DECORACIONES ANGEL E HIJAS"/>
+    { !loged ? <Login onLogin={handleLoged}/> : <div className="d-flex"><div className="scrolling" ><ClientList onAction={handleAction} onDelete={handleDeleteClient} cod_user={codUser} clients={clients}/> </div></div>}
     </>
   );
 }

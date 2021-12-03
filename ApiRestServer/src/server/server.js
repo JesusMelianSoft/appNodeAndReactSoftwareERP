@@ -137,37 +137,37 @@ app.get('/api/v1/trabajadores/', async(req, res) => {
 //     }
 // })
 
-// //Delete actor by id
-// app.delete('/api/v1/actor/:id', async(req, res) => {
-//     const { id } = req.params;
+//Delete client by id
+app.delete('/api/v1/client/:cod_cliente', async(req, res) => {
+    const { cod_cliente } = req.params;
 
-//     if(!id){
-//         res.status(400).send({ 
-//             error: true,
-//             message: 'provide actor id',
+    if(!id){
+        res.status(400).send({ 
+            error: true,
+            message: 'provide actor id',
 
-//         })
-//     }
-//     try {
-//         const sql = "DELETE FROM actores WHERE actor_id = ?";
-//         const result = await query(sql, [id]);
-//         let message = '';
+        })
+    }
+    try {
+        const sql = "DELETE FROM clientes WHERE cod_cliente = ?";
+        const result = await query(sql, [cod_cliente]);
+        let message = '';
         
-//         if(result.affectedRows === 0) {
-//             message = 'Actor is not found';
-//         }else{
-//             message = 'Actor successfully delete';
-//         }
+        if(result.affectedRows === 0) {
+            message = 'Client is not found';
+        }else{
+            message = 'Client successfully delete';
+        }
 
-//         res.send({
-//             error: false,
-//             data: {affectedRows: result.affectedRows},
-//             message: message
-//         })
-//     } catch (error) {
-//         console.log(error);
-//         res.sendStatus(500);
-//     }
-// })
+        res.send({
+            error: false,
+            data: {affectedRows: result.affectedRows},
+            message: message
+        })
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+})
 
 module.exports = { runServer, stopServer };

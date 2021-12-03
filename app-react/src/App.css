@@ -1,13 +1,49 @@
 .formLogin{
   width: 100%;
   max-width: 30rem;
-  margin: 10rem auto;
+  margin: 2rem auto;
   display: flex;
-  padding: 5rem;
+  padding: 2rem;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: cadetblue;
+  background-color: rgb(0, 255, 55);
   border-radius: 1rem;
 }
 
+.error-login{
+  color: red;
+}
+body{
+  background-color: rgb(201, 206, 208);
+}
+.title {
+  margin: 2rem;
+  padding: 2rem;
+  text-align: center;
+  background-color: black;
+  color: white;
+  font-weight: bold;
+  /*font-size: 15px;*/
+  border-radius: 1rem;
+}
+
+.div-form{
+  border-radius: 1rem;
+  background-color: rgb(0, 255, 179);
+  padding: 2rem;
+  border: black 5px dotted;
+}
+.title-form{
+  background-color: grey;
+  color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+}
+
+.scrolling{
+  height: 40rem;
+  width: 100%;
+  padding: 2rem;
+  overflow:scroll;
+}

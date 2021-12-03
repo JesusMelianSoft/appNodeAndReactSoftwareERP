@@ -9,8 +9,11 @@ const aGetTrabajadoresLogin = () => {
     return axios.get(`${API_URL}/trabajadores/`).then((response) => response.data);
 }
 
-export default {aGetTrabajadorForLogin, aGetTrabajadoresLogin};
-//export default agetAllActors;
-//export default aDelActor;
-//module.exports = { agetAllActors , aDelActor}
-//module.exports = { agetAllActors, aDelActor }
+const aGetClients = (cod_user) => {
+    return axios.get(`${API_URL}/clients/${cod_user}`).then((response) => response.data);
+}
+
+const delClientByCod = (cod_user) => {
+    return axios.delete(`${API_URL}/client/${cod_user}`).then((response) => response.data);
+}
+export default {aGetTrabajadorForLogin, aGetTrabajadoresLogin, aGetClients, delClientByCod};
