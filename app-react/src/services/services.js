@@ -5,7 +5,11 @@ const aGetTrabajadorForLogin = (name, pass) => {
     return axios.get(`${API_URL}/trabajador/${name}/${pass}`).then((response) => response.data);
 }
 
-export default {aGetTrabajadorForLogin};
+const aGetTrabajadoresLogin = () => {
+    return axios.get(`${API_URL}/trabajadores/`).then((response) => response.data);
+}
+
+export default {aGetTrabajadorForLogin, aGetTrabajadoresLogin};
 //export default agetAllActors;
 //export default aDelActor;
 //module.exports = { agetAllActors , aDelActor}

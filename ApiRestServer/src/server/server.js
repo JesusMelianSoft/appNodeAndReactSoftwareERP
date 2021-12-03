@@ -77,6 +77,32 @@ app.get('/api/v1/trabajador/:name/:pass', async(req, res) => {
     }
 })
 
+
+//OBTENER TRABAJADORES
+//HACER LOGIN EN BD
+app.get('/api/v1/trabajadores/', async(req, res) => {
+    const { name, pass } = req.params;
+    try {
+        const sql = "SELECT * FROM `trabajadores`";
+        const result = await query(sql);
+        let message = '';
+        if(result === undefined || result.length === 0) {
+            message = 'Actores table is empty';
+        }else{
+            message = 'Successfully retrieved all actors';
+        }
+
+        res.send({ 
+            error: false,
+            data: result,
+            message: message
+        })
+    } catch (error) {
+        console.log(error);
+        res.resStatus(500);
+    }
+})
+
 // //Update actor by id
 // app.put('/api/v1/actor/:id', async(req, res) => {
 //     console.log(req.body);
