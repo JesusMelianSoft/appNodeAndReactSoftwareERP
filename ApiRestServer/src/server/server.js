@@ -141,7 +141,7 @@ app.get('/api/v1/trabajadores/', async(req, res) => {
 app.delete('/api/v1/client/:cod_cliente', async(req, res) => {
     const { cod_cliente } = req.params;
 
-    if(!id){
+    if(!cod_cliente){
         res.status(400).send({ 
             error: true,
             message: 'provide actor id',

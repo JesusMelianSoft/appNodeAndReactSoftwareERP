@@ -4,6 +4,7 @@ import {Login} from './Components/Login'
 import {ClientList} from './Components/ClientList'
 import bd from './services/services'
 import { NavBar } from './Components/NavBar';
+import { Create } from './Components/ClientForm/Create';
 
 
 function App() {
@@ -32,8 +33,9 @@ function App() {
     const confirm = window.confirm("¿Está seguro que desea eliminar el registro con cod: "+cod_client+"?");
       if(confirm){
         bd.delClientByCod(cod_client).then((res) => {
-          window.alert("Registro: ", res.data, " eliminado correctamente");
+          window.alert("Registro con cod: "+ cod_client+ " eliminado correctamente");
         })
+        setReload(true);
       }
     }
   
@@ -47,7 +49,13 @@ function App() {
       
   }
 
-  
+  const handleComponent = () => {
+    console.log(action);
+    if(action === 0){
+      console.log('action 0');
+      return(<Create />);
+    }
+  }
   //ESTO SIRVE PARA QUE SE CARGE LA PRIMERA VEZ
   useEffect(() => {
     console.log('useEffect, LOGED: ',loged);
@@ -60,7 +68,18 @@ function App() {
   return (
     <>
     <NavBar title="DECORACIONES ANGEL E HIJAS"/>
-    { !loged ? <Login onLogin={handleLoged}/> : <div className="d-flex"><div className="scrolling" ><ClientList onAction={handleAction} onDelete={handleDeleteClient} cod_user={codUser} clients={clients}/> </div></div>}
+    { !loged 
+    ? 
+      <Login onLogin={handleLoged}/> 
+    : 
+      <div className="d-flex">
+        <div className="scrolling" >
+          <ClientList onAction={handleAction} onDelete={handleDeleteClient} cod_user={codUser} clients={clients}/> 
+        </div>
+        <div className="flex-sm-row col-sm-3 p-2 ">
+          {handleComponent()}
+        </div>
+      </div>}
     </>
   );
 }
