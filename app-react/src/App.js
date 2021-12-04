@@ -25,6 +25,12 @@ function App() {
     setLoged(bool);
     setReload(true);
   }
+
+  //PARA DESLOGEAR UN USUARIOS
+  const handleUnLogin = () => {
+    setLoged(false);
+    setReload(true);
+  }
   //PARA CAMBIAR DE UN FORMULARIO A OTRO
   const handleAction = (action, cod_client) => {
     if(action === 1){
@@ -111,7 +117,7 @@ function App() {
     : 
       <div className="d-flex">
         <div className="scrolling" >
-          <ClientList onAction={handleAction} onDelete={handleDeleteClient} cod_user={codUser} clients={clients}/> 
+          <ClientList onAction={handleAction} onDelete={handleDeleteClient} cod_user={codUser} clients={clients} unLogin={handleUnLogin}/> 
         </div>
         <div className="flex-sm-row col-sm-3 p-2 ">
           {handleComponent()}

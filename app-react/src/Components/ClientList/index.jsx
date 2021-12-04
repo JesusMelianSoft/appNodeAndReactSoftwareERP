@@ -2,7 +2,7 @@ import React from 'react'
 import {useState, useEffect} from "react";
 import bd from '../../services/services';
 
-export const ClientList = ({ onAction, onDelete, cod_user, clients = [] }) => {
+export const ClientList = ({ onAction, onDelete, cod_user, clients = [] , unLogin}) => {
 
     console.log('CLIENT LIST COD_USER: ', cod_user);
     //OBTENGO TODOS LOS CLIENTES DE CADA EMPLEADO
@@ -14,7 +14,7 @@ export const ClientList = ({ onAction, onDelete, cod_user, clients = [] }) => {
     // });
     return (
         <>
-        <h1 className="text-center">Listado de Clientes</h1>
+        <h1 className="text-center">Listado de Clientes</h1><button type="button" className="btn btn-danger m-2" onClick={unLogin}>CERRAR SESIÓN</button>
             <table className="table table-striped">
                 <thead>
                     <tr className="bg-dark text-light">
