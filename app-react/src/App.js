@@ -16,6 +16,7 @@ function App() {
   const [clients, setClients] = useState();
   const [client, setClient] = useState();
 
+  //PARA COMPROBAR EL LOGIN
   const handleLoged = (bool, cod_user) => {
     setCodUser(cod_user);
     console.log('handleloged codUser: ' + codUser);
@@ -24,6 +25,7 @@ function App() {
     setLoged(bool);
     setReload(true);
   }
+  //PARA CAMBIAR DE UN FORMULARIO A OTRO
   const handleAction = (action, cod_client) => {
     if(action === 1){
       handleEditClient(cod_client);
@@ -33,10 +35,13 @@ function App() {
     setReload(true);
   }
 
+  
   const handleEditClient = (cod_client) => {
     setCodClient(cod_client);
     setReload(true);
   }
+
+  //BORRAR CLIENTE
   const handleDeleteClient = (cod_client) => {
     const confirm = window.confirm("¿Está seguro que desea eliminar el registro con cod: "+cod_client+"?");
       if(confirm){
@@ -46,7 +51,8 @@ function App() {
         setReload(true);
       }
     }
-  
+
+    //OBTENER TODOS LOS CLIENTES DE UN TRABAJADOR
     const handleGetAllClientByUser = (cod_user) => {
       console.log("COD USER PARA BUSCAR CLIENTES: "+cod_user)
           bd.aGetClients(cod_user).then((res) => {
@@ -71,6 +77,12 @@ function App() {
     setReload(true);
   }
 
+  //INSERTAR CLIENTE
+  const handleInsert = (client) => {
+
+  }
+
+  //CARGAR LOS FORMULARIOS DEPENDIENDO DE LA ACCION
   const handleComponent = () => {
     console.log(action);
     if(action === 0){

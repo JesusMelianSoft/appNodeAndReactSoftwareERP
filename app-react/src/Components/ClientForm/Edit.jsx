@@ -3,6 +3,7 @@ import {useState, useEffect} from "react";
 
 export const Edit = ({clients, cod_user, cod_client, onEdit}) => {
     console.log('Elementos: '+cod_user+cod_client);
+    //FILTRO TODOS LOS CLIENTES CON EL COD DE CLIENTE Y EL COD DE TRABAJADOR QUE LE PASO
     const filtrarCodCli = (cod_client, cod_user) => {
         const result = clients.filter(clients => {return clients.cod_cliente === cod_client && clients.cod_user === cod_user});
         console.log('Result:', result);
@@ -11,6 +12,7 @@ export const Edit = ({clients, cod_user, cod_client, onEdit}) => {
     const myClient = filtrarCodCli(cod_client, cod_user);
 
     console.log('filtrarCodCli: ',myClient);
+    //INICIO EL CLIENTE CON LOS DATOS QUE VIENEN DE ARRIBA
     const [client, setClient] = useState({
         cod_cliente: myClient.cod_cliente,
         nombre_c: myClient.nombre_c,
@@ -22,7 +24,7 @@ export const Edit = ({clients, cod_user, cod_client, onEdit}) => {
 
     });
     
-
+    //VOY CAMBIANDO EL VALOR CADA VEZ QUE MODIFICO ALGO EN EL FORMULARIO
     const handleInputChange = (event) => {
         console.log(event.target.value);
         setClient({
@@ -32,6 +34,7 @@ export const Edit = ({clients, cod_user, cod_client, onEdit}) => {
         console.log("mi client: ",client);
     }
 
+    //LLAMO A LA FUNCION HANDLEEDIT DEL APP PARA EDITAR EL CLIENTE(HACER PUT)
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('handleSubmitClient', client);
