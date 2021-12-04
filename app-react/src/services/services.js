@@ -16,4 +16,14 @@ const aGetClients = (cod_user) => {
 const delClientByCod = (cod_user) => {
     return axios.delete(`${API_URL}/client/${cod_user}`).then((response) => response.data);
 }
-export default {aGetTrabajadorForLogin, aGetTrabajadoresLogin, aGetClients, delClientByCod};
+
+const aGetClientByCod = (cod_client, cod_user) => {
+    console.log("aGetClientById: "+`${API_URL}/client/${cod_client}/${cod_user}`);
+    return axios.get(`${API_URL}/client/${cod_client}/${cod_user}`).then((response) => response.data);
+}
+
+const aPutClient = (client) => {
+    console.log('aPutClient'+`${API_URL}/client/${client.cod_cliente}`, client)
+    return axios.put(`${API_URL}/client/${client.cod_cliente}`, client).then((response) => response.data);
+}
+export default {aGetTrabajadorForLogin, aGetTrabajadoresLogin, aGetClients, delClientByCod, aGetClientByCod, aPutClient};

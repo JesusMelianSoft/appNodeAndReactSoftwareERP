@@ -5,7 +5,7 @@ import {ClientList} from './Components/ClientList'
 import bd from './services/services'
 import { NavBar } from './Components/NavBar';
 import { Create } from './Components/ClientForm/Create';
-
+import { Edit} from './Components/ClientForm/Edit';
 
 function App() {
   const [loged, setLoged] = useState(false);
@@ -14,6 +14,7 @@ function App() {
   const [action, setAction] = useState(0);
   const [codClient, setCodClient] = useState();
   const [clients, setClients] = useState();
+  const [client, setClient] = useState();
 
   const handleLoged = (bool, cod_user) => {
     setCodUser(cod_user);
@@ -24,11 +25,18 @@ function App() {
     setReload(true);
   }
   const handleAction = (action, cod_client) => {
+    if(action === 1){
+      handleEditClient(cod_client);
+    }
     setCodClient(cod_client)
     setAction(action);
     setReload(true);
   }
 
+  const handleEditClient = (cod_client) => {
+    setCodClient(cod_client);
+    setReload(true);
+  }
   const handleDeleteClient = (cod_client) => {
     const confirm = window.confirm("¿Está seguro que desea eliminar el registro con cod: "+cod_client+"?");
       if(confirm){
@@ -46,7 +54,21 @@ function App() {
           //meto los actores en el array de actores
           setClients(res.data);
           })
-      
+      setReload(true);
+  }
+
+
+  //EDITAR CLIENTE
+  const handleEdit = (client) => {
+    console.log('handleEdit myclient',client);
+    bd.aPutClient(client).then((res) => {
+      console.log('res.data 2',res.data);
+      window.alert("CLIENTE EDITADO CORRECTAMENTE");
+    })
+    //cambio la accion a crear
+    handleAction(0);
+    //RECARGO LA PAGINA
+    setReload(true);
   }
 
   const handleComponent = () => {
@@ -54,6 +76,9 @@ function App() {
     if(action === 0){
       console.log('action 0');
       return(<Create />);
+    }else if(action === 1){
+      console.log('handleComponentEdit: ',client)
+      return(<Edit clients={clients} cod_user={codUser} cod_client={codClient} onEdit={handleEdit}/>);
     }
   }
   //ESTO SIRVE PARA QUE SE CARGE LA PRIMERA VEZ

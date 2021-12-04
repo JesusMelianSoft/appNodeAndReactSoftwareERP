@@ -103,45 +103,71 @@ app.get('/api/v1/trabajadores/', async(req, res) => {
     }
 })
 
-// //Update actor by id
-// app.put('/api/v1/actor/:id', async(req, res) => {
-//     console.log(req.body);
-//     const { first_name, last_name } = req.body;
-//     const { id } = req.params;
+app.get('/api/v1/client/:cod_client/:cod_user', async(req, res) => {
+    console.log('PARAMS',req.params);
+    const { cod_client, cod_user } = req.params;
+    console.log('COD_CLIENTE: '+cod_client);
+    console.log('COD_USER: ',cod_user);
+    try {
+        const sql = "SELECT * FROM clientes WHERE cod_cliente = ? AND cod_user = ?";
+        const result = await query(sql, [cod_client, cod_user]);
+        let message = '';
+        if(result === undefined || result.length === 0) {
+            message = 'Actores table is empty';
+        }else{
+            message = 'Successfully retrieved all client';
+        }
 
-//     if(!id || !first_name || !last_name) {
-//         return res.status(400).send({
-//             error: true,
-//             message: 'provide actor id, first_name and last_name'
-//         })
-//     }
+        res.send({ 
+            error: false,
+            data: result,
+            message: message
+        })
+    } catch (error) {
+        console.log(error);
+        res.resStatus(500);
+    }
+})
+//Update client by cod
+app.put('/api/v1/client/:cod_client', async(req, res) => {
+    console.log(req.body);
+    const { cod_cliente, nombre_c, apellidos_c, direccion_c, telefono_c, email_c, debe } = req.body;
+    const { cod_client } = req.params;
+    console.log('req.body: ',req.body);
 
-//     try {
-//         const sql = 'UPDATE actores SET first_name=?, last_name=? WHERE actor_id=?';
-//         const result = await query(sql, [first_name, last_name, id])
+    // if(!cod_cliente || !nombre_c || !debe) {
+    //     return res.status(400).send({
+    //         error: true,
+    //         message: 'provide client id, first_name and last_name'
+    //     })
+    // }
 
-//         let message = '';
-//         if(result.changedRows == 0){
-//             message = 'Actor not found or data are same';
-//         }else{
-//             message = 'Actor successfully updated';
-//         }
-//         res.send({
-//             error: false,
-//             data: {chandedRows: result.chandedRows},
-//             message: message
-//         })
-//     } catch (error) {
-//         console.log(error);
-//         res.sendStatus(500);
-//     }
-// })
+    try {
+        const sql = 'UPDATE clientes SET cod_cliente = ?, nombre_c = ?, apellidos_c = ?, direccion_c = ?, telefono_c = ?, email_c = ?, debe = ? WHERE cod_cliente = ?';
+        const result = await query(sql, [cod_cliente, nombre_c, apellidos_c, direccion_c, telefono_c, email_c, debe, cod_client])
+
+        let message = '';
+        if(result.changedRows == 0){
+            message = 'Actor not found or data are same';
+        }else{
+            message = 'Actor successfully updated';
+        }
+        res.send({
+            error: false,
+            data: {chandedRows: result.chandedRows},
+            message: message
+        })
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+})
 
 //Delete client by id
 app.delete('/api/v1/client/:cod_cliente', async(req, res) => {
     const { cod_cliente } = req.params;
 
-    if(!cod_cliente){
+    if(!id){
         res.status(400).send({ 
             error: true,
             message: 'provide actor id',

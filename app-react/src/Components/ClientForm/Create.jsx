@@ -8,11 +8,11 @@ export const Create = ({onInsert}) => {
             <form className="form-padding border border-dark div-form" >
                 <div className="form-group">
                     <label for="last_name">Código</label>
-                    <input type="text" className="form-control" id="cod_cliente" name="cod_cliente" value=""/>
+                    <input type="number" className="form-control" id="cod_cliente" name="cod_cliente" value=""/>
                 </div>
                 <div className="form-group">
                     <label for="first_name">Nombre</label>
-                    <input type="text" className="form-control" id="nombre_c" name="nombre_c" o value=""/>
+                    <input type="text" className="form-control" id="nombre_c" name="nombre_c" value=""/>
                 </div>
 
                 <div className="form-group">
@@ -26,7 +26,7 @@ export const Create = ({onInsert}) => {
                 </div>
                 <div className="form-group">
                     <label for="last_name">Debe</label>
-                    <input type="text" className="form-control" id="debe" name="debe" value=""/>
+                    <input type="number" className="form-control" id="debe" name="debe" value=""/>
                 </div>
                 <div className="form-group">
                     <label for="last_name">Teléfono</label>
