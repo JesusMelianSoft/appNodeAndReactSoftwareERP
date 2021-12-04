@@ -38,7 +38,7 @@ export const ClientList = ({ onAction, onDelete, cod_user, clients = [] }) => {
                                             <button type="button" className="btn btn-success m-2" id={client.cod_cliente} onClick={() => {onAction(2,client.cod_cliente)}}>PAGO</button>
                                             <button type="button" className="btn btn-success m-2" id={client.cod_cliente} onClick={() => {onAction(3,client.cod_cliente)}}>COMPRA</button>
                                             <button type="button" className="btn btn-warning m-2" id={client.cod_cliente} onClick={() => {onAction(1,client.cod_cliente)}}>EDITAR</button>
-                                            <button type="button" className="btn btn-danger" id={client.cod_cliente} onClick={() => onDelete(client.cod_cliente)}>BORRAR</button>
+                                            <button type="button" className="btn btn-danger" id={client.cod_cliente} onClick={() => onDelete(client.cod_cliente, cod_user)}>BORRAR</button>
                                         </td>
                                     </tr>                    
                                 );

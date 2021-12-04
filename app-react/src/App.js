@@ -35,17 +35,17 @@ function App() {
     setReload(true);
   }
 
-  
+
   const handleEditClient = (cod_client) => {
     setCodClient(cod_client);
     setReload(true);
   }
 
   //BORRAR CLIENTE
-  const handleDeleteClient = (cod_client) => {
+  const handleDeleteClient = (cod_client, cod_user) => {
     const confirm = window.confirm("¿Está seguro que desea eliminar el registro con cod: "+cod_client+"?");
       if(confirm){
-        bd.delClientByCod(cod_client).then((res) => {
+        bd.delClientByCod(cod_client, cod_user).then((res) => {
           window.alert("Registro con cod: "+ cod_client+ " eliminado correctamente");
         })
         setReload(true);

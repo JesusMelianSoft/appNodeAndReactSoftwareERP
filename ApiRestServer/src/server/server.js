@@ -135,13 +135,6 @@ app.put('/api/v1/client/:cod_client', async(req, res) => {
     const { cod_client } = req.params;
     console.log('req.body: ',req.body);
 
-    // if(!cod_cliente || !nombre_c || !debe) {
-    //     return res.status(400).send({
-    //         error: true,
-    //         message: 'provide client id, first_name and last_name'
-    //     })
-    // }
-
     try {
         const sql = 'UPDATE clientes SET cod_cliente = ?, nombre_c = ?, apellidos_c = ?, direccion_c = ?, telefono_c = ?, email_c = ?, debe = ? WHERE cod_cliente = ?';
         const result = await query(sql, [cod_cliente, nombre_c, apellidos_c, direccion_c, telefono_c, email_c, debe, cod_client])
@@ -164,10 +157,10 @@ app.put('/api/v1/client/:cod_client', async(req, res) => {
 })
 
 //Delete client by id
-app.delete('/api/v1/client/:cod_cliente', async(req, res) => {
-    const { cod_cliente } = req.params;
+app.delete('/api/v1/client/:cod_cliente/:cod_user', async(req, res) => {
+    const { cod_cliente, cod_user} = req.params;
 
-    if(!id){
+    if(!cod_cliente){
         res.status(400).send({ 
             error: true,
             message: 'provide actor id',
@@ -175,8 +168,8 @@ app.delete('/api/v1/client/:cod_cliente', async(req, res) => {
         })
     }
     try {
-        const sql = "DELETE FROM clientes WHERE cod_cliente = ?";
-        const result = await query(sql, [cod_cliente]);
+        const sql = "DELETE FROM clientes WHERE cod_cliente = ? AND cod_user = ?";
+        const result = await query(sql, [cod_cliente, cod_user]);
         let message = '';
         
         if(result.affectedRows === 0) {

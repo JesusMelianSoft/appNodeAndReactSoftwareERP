@@ -13,8 +13,9 @@ const aGetClients = (cod_user) => {
     return axios.get(`${API_URL}/clients/${cod_user}`).then((response) => response.data);
 }
 
-const delClientByCod = (cod_user) => {
-    return axios.delete(`${API_URL}/client/${cod_user}`).then((response) => response.data);
+const delClientByCod = (cod_client, cod_user) => {
+    console.log("DEL CLIENTE: "+`${API_URL}/client/${cod_client}/${cod_user}`)
+    return axios.delete(`${API_URL}/client/${cod_client}/${cod_user}`).then((response) => response.data);
 }
 
 const aGetClientByCod = (cod_client, cod_user) => {
