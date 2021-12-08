@@ -47,3 +47,10 @@ body{
   padding: 2rem;
   overflow:scroll;
 }
+
+.search_box{
+  float: left;
+}
+.count_box{
+  float:right;
+}

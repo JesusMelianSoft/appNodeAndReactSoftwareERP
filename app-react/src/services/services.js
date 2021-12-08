@@ -27,4 +27,14 @@ const aPutClient = (client) => {
     console.log('aPutClient'+`${API_URL}/client/${client.cod_cliente}`, client)
     return axios.put(`${API_URL}/client/${client.cod_cliente}`, client).then((response) => response.data);
 }
-export default {aGetTrabajadorForLogin, aGetTrabajadoresLogin, aGetClients, delClientByCod, aGetClientByCod, aPutClient};
+
+const aGetDebeClients = (cod_user) => {
+    console.log('aGetDebeClients'+`${API_URL}/totalDebeClient/${cod_user}`);
+    return axios.get(`${API_URL}/totalDebeClient/${cod_user}`).then((response) => response.data);
+}
+
+const aInsertClient = (client) => {
+    console.log(client)
+    return axios.post(`${API_URL}/client/`, client).then((response) => response.data);
+}
+export default {aGetTrabajadorForLogin, aGetTrabajadoresLogin, aGetClients, delClientByCod, aGetClientByCod, aPutClient, aGetDebeClients, aInsertClient};

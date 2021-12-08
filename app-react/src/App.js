@@ -15,6 +15,7 @@ function App() {
   const [codClient, setCodClient] = useState();
   const [clients, setClients] = useState();
   const [client, setClient] = useState();
+  const [totalTaco, setTotalTaco] = useState(null);
 
   //PARA COMPROBAR EL LOGIN
   const handleLoged = (bool, cod_user) => {
@@ -85,15 +86,38 @@ function App() {
 
   //INSERTAR CLIENTE
   const handleInsert = (client) => {
-
+    const finalClient = {
+      cod_cliente: client.cod_cliente,
+      nombre_c: client.nombre_c,
+      apellidos_c: client.apellidos_c,
+      direccion_c: client.direccion_c,
+      telefono_c: client.telefono_c,
+      email: client.email,
+      debe: client.debe,
+      cod_user: codUser
+    }
+    console.log("FINALCLIENT", finalClient);
+    bd.aInsertClient(finalClient).then((res) => {
+      console.log("SE HA INSERTADO CORRECTAMENTE")
+      window.alert("SE HA INSERTADO EL CLIENTE:",res.data)
+    })
+    setReload(true);
   }
 
+  //OBTENGO EL TOTAL DEL TACO
+  const handleGetDebeClient = () => {
+    console.log("ENTRO EN GETDEBECLIENT")
+    bd.aGetDebeClients(codUser).then((res) => {
+      console.log('TOTAL: ',res.data[0].suma);
+      setTotalTaco(res.data[0].suma);
+    })
+  }
   //CARGAR LOS FORMULARIOS DEPENDIENDO DE LA ACCION
   const handleComponent = () => {
     console.log(action);
     if(action === 0){
       console.log('action 0');
-      return(<Create />);
+      return(<Create onInsert={handleInsert} />);
     }else if(action === 1){
       console.log('handleComponentEdit: ',client)
       return(<Edit clients={clients} cod_user={codUser} cod_client={codClient} onEdit={handleEdit}/>);
@@ -104,6 +128,7 @@ function App() {
     console.log('useEffect, LOGED: ',loged);
     console.log('useEffect, coduser: ',codUser);
     handleGetAllClientByUser(codUser);
+    handleGetDebeClient();
     setReload(false);
     //le paso una variable, si esta a true, recarga, y si no no recarga
   }, [reload]);
@@ -117,7 +142,7 @@ function App() {
     : 
       <div className="d-flex">
         <div className="scrolling" >
-          <ClientList onAction={handleAction} onDelete={handleDeleteClient} cod_user={codUser} clients={clients} unLogin={handleUnLogin}/> 
+          <ClientList onAction={handleAction} onDelete={handleDeleteClient} cod_user={codUser} clients={clients} unLogin={handleUnLogin} total={totalTaco}/> 
         </div>
         <div className="flex-sm-row col-sm-3 p-2 ">
           {handleComponent()}

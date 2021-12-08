@@ -2,9 +2,7 @@ import React from 'react'
 import {useState, useEffect} from "react";
 import bd from '../../services/services';
 
-export const ClientList = ({ onAction, onDelete, cod_user, clients = [] , unLogin}) => {
-
-    console.log('CLIENT LIST COD_USER: ', cod_user);
+export const ClientList = ({ onAction, onDelete, cod_user, clients = [] , unLogin, total}) => {
     //OBTENGO TODOS LOS CLIENTES DE CADA EMPLEADO
     
 
@@ -14,21 +12,29 @@ export const ClientList = ({ onAction, onDelete, cod_user, clients = [] , unLogi
     // });
     return (
         <>
-        <form action="onSearch">
-            <label>BUSCAR:</label>
+        
+        <div className="search_box">
+        <button type="button" className="btn btn-danger m-2" onClick={unLogin}>CERRAR SESIÓN</button>
+            <form action="onSearch">
+                <label>BUSCAR:</label>
+                <br />
+                <input type="text" placeholder="Introduzca un nombre o un codigo"/>
+                <button type="button" className="btn btn-success m-2" onClick={() => {onAction(5,null)}}>PAGOS</button>
+                <button type="button" className="btn btn-success m-2" onClick={() => {onAction(6,null)}}>COMPRAS</button>            
+            </form>
+        </div>
+        <div className="count_box">
+            <label>TOTAL SEMANA</label>
             <br />
-            <input type="text" placeholder="Introduzca un nombre o un codigo"/>
-            <button type="button" className="btn btn-success m-2" onClick={() => {onAction(5,null)}}>PAGOS</button>
-            <button type="button" className="btn btn-success m-2" onClick={() => {onAction(6,null)}}>COMPRAS</button>            
-        </form>
-        <label>TOTAL SEMANA</label>
-                <br />
-                <input type="number" disabled />
-                <br />
-                <label>TOTAL TACO</label>
-                <br />
-                <input type="number" disabled />
-        <h1 className="text-center">Listado de Clientes</h1><button type="button" className="btn btn-danger m-2" onClick={unLogin}>CERRAR SESIÓN</button>
+            <input type="number" disabled />
+            <br />
+            <label>TOTAL TACO</label>
+            <br />
+            <input type="text" value={total+" €"} disabled />
+            <button type="button" className="btn btn-danger m-2" >RESET</button>
+        </div>
+        <br />
+        <h1 className="text-center">Listado de Clientes</h1>
             <table className="table table-striped">
                 <thead>
                     <tr className="bg-dark text-light">

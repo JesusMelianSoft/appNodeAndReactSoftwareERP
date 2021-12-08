@@ -33,8 +33,8 @@ const stopServer = () => {
 app.get('/api/v1/clients/:cod_user', async(req, res) => {
     const { cod_user } = req.params;
     try {
-        const sql = "SELECT * FROM clientes WHERE cod_user ="+cod_user;
-        const result = await query(sql);
+        const sql = "SELECT * FROM clientes WHERE cod_user =? ORDER BY cod_cliente";
+        const result = await query(sql, [cod_user]);
         let message = '';
         if(result === undefined || result.length === 0) {
             message = 'Actores table is empty';
@@ -189,4 +189,71 @@ app.delete('/api/v1/client/:cod_cliente/:cod_user', async(req, res) => {
     }
 })
 
+//OBTENER TOTAL DEL TACO
+app.get('/api/v1/totalDebeClient/:cod_user', async(req, res) => {
+    const { cod_user} = req.params;
+    try {
+        console.log("SERVER"+cod_user)
+        const sql = "SELECT SUM(debe) AS suma FROM clientes WHERE clientes.cod_user="+cod_user;
+        const result = await query(sql);
+        let message = '';
+        if(result === undefined || result.length === 0) {
+            message = 'Actores table is empty';
+        }else{
+            message = 'Successfully retrieved all actors';
+        }
+
+        res.send({ 
+            error: false,
+            data: result,
+            message: message
+        })
+    } catch (error) {
+        console.log(error);
+        res.resStatus(500);
+    }
+})
+
+// Add new client
+app.post('/api/v1/client', async(req, res) => {
+    console.log("BODY DE CLIENTE",req.body);
+    var { cod_cliente, nombre_c, apellidos_c, direccion_c, telefono_c, email_c, debe, cod_user} = req.body;
+
+    if(!cod_cliente || !nombre_c) {
+        return res.status(400).send({
+            error: true,
+            message: 'provide actor first_name and last_name'
+        })
+    }
+    if(debe==="" || debe===null || debe===undefined) {
+        debe=0;
+    }
+    if(direccion_c==="" || direccion_c==null || direccion_c===undefined){
+        direccion_c="";
+    }
+    if(telefono_c==="" || telefono_c===null || telefono_c===undefined){
+        telefono_c=0;
+    }
+
+    if(email_c==="" || email_c===undefined || email_c===null){
+        email_c="";
+    }
+
+    console.log("MI CLIENTE:",cod_cliente, nombre_c, apellidos_c, direccion_c, telefono_c, email_c, debe, cod_user);
+    try {
+        const sql = 'INSERT INTO clientes (cod_cliente, nombre_c, apellidos_c, direccion_c, telefono_c, email_c, debe, cod_user) VALUES (?,?,?,?,?,?,?,?)';
+        console.log('SQL:',sql)
+        const result = await query(sql, [cod_cliente, nombre_c, apellidos_c, direccion_c, telefono_c, email_c, debe, cod_user])
+        console.log('result insertClient: ',result)
+
+        res.send({
+            error: false,
+            data: {cod_cliente},
+            message: 'Client successfully added with id ' + result.insert_id
+        })
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+})
 module.exports = { runServer, stopServer };
