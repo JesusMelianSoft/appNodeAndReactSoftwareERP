@@ -14,6 +14,20 @@ export const ClientList = ({ onAction, onDelete, cod_user, clients = [] , unLogi
     // });
     return (
         <>
+        <form action="onSearch">
+            <label>BUSCAR:</label>
+            <br />
+            <input type="text" placeholder="Introduzca un nombre o un codigo"/>
+            <button type="button" className="btn btn-success m-2" onClick={() => {onAction(5,null)}}>PAGOS</button>
+            <button type="button" className="btn btn-success m-2" onClick={() => {onAction(6,null)}}>COMPRAS</button>            
+        </form>
+        <label>TOTAL SEMANA</label>
+                <br />
+                <input type="number" disabled />
+                <br />
+                <label>TOTAL TACO</label>
+                <br />
+                <input type="number" disabled />
         <h1 className="text-center">Listado de Clientes</h1><button type="button" className="btn btn-danger m-2" onClick={unLogin}>CERRAR SESIÓN</button>
             <table className="table table-striped">
                 <thead>
