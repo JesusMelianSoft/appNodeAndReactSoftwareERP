@@ -53,6 +53,41 @@ app.get('/api/v1/clients/:cod_user', async(req, res) => {
     }
 })
 
+//BUSQUEDA POR nombre o codigo
+app.get('/api/v1/clients/:cod_user/:dato', async(req, res) => {
+    const { cod_user, dato } = req.params;
+    console.log("DATO :",dato);
+    var sql="";
+    var result;
+    try {
+        if(dato>0){
+            sql = "SELECT * FROM clientes WHERE cod_user =? AND cod_cliente = ? ORDER BY cod_cliente";
+            console.log("SQL1", sql);
+            result = await query(sql, [cod_user, dato]);
+        }else{
+            sql = "SELECT * FROM clientes WHERE cod_user =? AND nombre_c LIKE ? ORDER BY cod_cliente";
+            console.log("SQL2", sql);
+            result = await query(sql, [cod_user, "%"+dato+"%"]);
+        }
+        let message = '';
+        if(result === undefined || result.length === 0) {
+            message = 'No se encuentra el cliente';
+        }else{
+            message = 'MOSTRANDO CLIENTES...';
+        }
+
+        res.send({ 
+            error: false,
+            data: result,
+            message: message
+        })
+    } catch (error) {
+        console.log(error);
+        res.resStatus(500);
+    }
+})
+
+
 //HACER LOGIN EN BD
 app.get('/api/v1/trabajador/:name/:pass', async(req, res) => {
     const { name, pass } = req.params;

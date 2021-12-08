@@ -99,7 +99,6 @@ function App() {
     console.log("FINALCLIENT", finalClient);
     bd.aInsertClient(finalClient).then((res) => {
       console.log("SE HA INSERTADO CORRECTAMENTE")
-      window.alert("SE HA INSERTADO EL CLIENTE:",res.data)
     })
     setReload(true);
   }
@@ -122,6 +121,19 @@ function App() {
       console.log('handleComponentEdit: ',client)
       return(<Edit clients={clients} cod_user={codUser} cod_client={codClient} onEdit={handleEdit}/>);
     }
+
+  }
+
+  //BUSQUEDA CLIENTES 
+  const handleSearch = (data) => {
+    console.log("MIS DATOS: ",data);
+    bd.aSearchClients(codUser, data).then((res) => {
+      console.log("res data seacrh:",res.data);
+      //setClients({});
+      setClients(res.data);
+    })
+    //No puedo recargar la página por q sino vuelven a ponerse los clientes por defecto
+    //setReload(true);
   }
   //ESTO SIRVE PARA QUE SE CARGE LA PRIMERA VEZ
   useEffect(() => {
@@ -142,7 +154,7 @@ function App() {
     : 
       <div className="d-flex">
         <div className="scrolling" >
-          <ClientList onAction={handleAction} onDelete={handleDeleteClient} cod_user={codUser} clients={clients} unLogin={handleUnLogin} total={totalTaco}/> 
+          <ClientList onAction={handleAction} onDelete={handleDeleteClient} cod_user={codUser} clients={clients} unLogin={handleUnLogin} total={totalTaco} onSearch={handleSearch}/> 
         </div>
         <div className="flex-sm-row col-sm-3 p-2 ">
           {handleComponent()}

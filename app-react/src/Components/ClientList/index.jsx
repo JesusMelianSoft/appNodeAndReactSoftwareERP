@@ -2,10 +2,15 @@ import React from 'react'
 import {useState, useEffect} from "react";
 import bd from '../../services/services';
 
-export const ClientList = ({ onAction, onDelete, cod_user, clients = [] , unLogin, total}) => {
+export const ClientList = ({ onAction, onDelete, cod_user, clients = [] , unLogin, total, onSearch}) => {
     //OBTENGO TODOS LOS CLIENTES DE CADA EMPLEADO
-    
-
+    const [dato, setDato] = useState(undefined)
+    var data;
+    const handleInputChange = (event) => {
+        data=event.target.value
+        console.log("busqueda: "+data);
+        onSearch(data);
+    }
     // //ESTO SIRVE PARA QUE SE CARGE LA PRIMERA VEZ
     // useEffect(() => {
     //     handleGetAllClientByUser(cod_user);
@@ -18,13 +23,17 @@ export const ClientList = ({ onAction, onDelete, cod_user, clients = [] , unLogi
             <form action="onSearch">
                 <label>BUSCAR:</label>
                 <br />
-                <input type="text" placeholder="Introduzca un nombre o un codigo"/>
+                <input type="text" placeholder="Introduzca un nombre o un codigo" onChange={handleInputChange} value={data}/>
                 <button type="button" className="btn btn-success m-2" onClick={() => {onAction(5,null)}}>PAGOS</button>
                 <button type="button" className="btn btn-success m-2" onClick={() => {onAction(6,null)}}>COMPRAS</button>            
             </form>
         </div>
         <div className="count_box">
-            <label>TOTAL SEMANA</label>
+            <label>TOTAL VENTAS SEMANA</label>
+            <br />
+            <input type="number" disabled />
+            <br />
+            <label>TOTAL COBRO SEMANA</label>
             <br />
             <input type="number" disabled />
             <br />

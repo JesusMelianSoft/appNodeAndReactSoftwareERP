@@ -37,4 +37,8 @@ const aInsertClient = (client) => {
     console.log(client)
     return axios.post(`${API_URL}/client/`, client).then((response) => response.data);
 }
-export default {aGetTrabajadorForLogin, aGetTrabajadoresLogin, aGetClients, delClientByCod, aGetClientByCod, aPutClient, aGetDebeClients, aInsertClient};
+
+const aSearchClients = (cod_user, dato) => {
+    return axios.get(`${API_URL}/clients/${cod_user}/${dato}`).then((response) => response.data);
+}
+export default {aGetTrabajadorForLogin, aGetTrabajadoresLogin, aGetClients, delClientByCod, aGetClientByCod, aPutClient, aGetDebeClients, aInsertClient, aSearchClients};
