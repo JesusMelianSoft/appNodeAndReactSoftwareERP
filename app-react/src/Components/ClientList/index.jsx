@@ -11,10 +11,6 @@ export const ClientList = ({ onAction, onDelete, cod_user, clients = [] , unLogi
         console.log("busqueda: "+data);
         onSearch(data);
     }
-    // //ESTO SIRVE PARA QUE SE CARGE LA PRIMERA VEZ
-    // useEffect(() => {
-    //     handleGetAllClientByUser(cod_user);
-    // });
     return (
         <>
         
@@ -24,8 +20,8 @@ export const ClientList = ({ onAction, onDelete, cod_user, clients = [] , unLogi
                 <label>BUSCAR:</label>
                 <br />
                 <input type="text" placeholder="Introduzca un nombre o un codigo" onChange={handleInputChange} value={data}/>
-                <button type="button" className="btn btn-success m-2" onClick={() => {onAction(5,null)}}>PAGOS</button>
-                <button type="button" className="btn btn-success m-2" onClick={() => {onAction(6,null)}}>COMPRAS</button>            
+                <button type="button" className="btn btn-success m-2" onClick={() => {onAction(4,null)}}>PAGOS</button>
+                <button type="button" className="btn btn-success m-2" onClick={() => {onAction(5,null)}}>COMPRAS</button>            
             </form>
         </div>
         <div className="count_box">

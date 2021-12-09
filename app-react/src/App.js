@@ -119,7 +119,8 @@ function App() {
       return(<Create onInsert={handleInsert} />);
     }else if(action === 1){
       console.log('handleComponentEdit: ',client)
-      return(<Edit clients={clients} cod_user={codUser} cod_client={codClient} onEdit={handleEdit}/>);
+      const myClient = handleFilterEdit(codClient, codUser);
+      return(<Edit myClient={myClient} onEdit={handleEdit} />);
     }
 
   }
@@ -134,6 +135,16 @@ function App() {
     })
     //No puedo recargar la página por q sino vuelven a ponerse los clientes por defecto
     //setReload(true);
+  }
+
+  const handleFilterEdit = (cod_client, cod_user) => {
+    const filtrarCodCli = (cod_client, cod_user) => {
+      const result = clients.filter(clients => {return clients.cod_cliente === cod_client && clients.cod_user === cod_user});
+      console.log('Result:', result);
+      return result[0];
+  }
+  const myClient = filtrarCodCli(cod_client, cod_user);
+  return myClient;
   }
   //ESTO SIRVE PARA QUE SE CARGE LA PRIMERA VEZ
   useEffect(() => {

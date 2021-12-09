@@ -1,29 +1,27 @@
 import React from 'react'
 import {useState, useEffect} from "react";
 
-export const Edit = ({clients, cod_user, cod_client, onEdit}) => {
-    console.log('Elementos: '+cod_user+cod_client);
-    //FILTRO TODOS LOS CLIENTES CON EL COD DE CLIENTE Y EL COD DE TRABAJADOR QUE LE PASO
-    const filtrarCodCli = (cod_client, cod_user) => {
-        const result = clients.filter(clients => {return clients.cod_cliente === cod_client && clients.cod_user === cod_user});
-        console.log('Result:', result);
-        return result[0];
-    }
-    const myClient = filtrarCodCli(cod_client, cod_user);
-
-    console.log('filtrarCodCli: ',myClient);
-    //INICIO EL CLIENTE CON LOS DATOS QUE VIENEN DE ARRIBA
-    const [client, setClient] = useState({
-        cod_cliente: myClient.cod_cliente,
-        nombre_c: myClient.nombre_c,
-        apellidos_c: myClient.apellidos_c,
-        direccion_c: myClient.direccion_c,
-        telefono_c: myClient.telefono_c,
-        email_c: myClient.email_c,
-        debe: myClient.debe,
-
-    });
+const initializedClient = {
     
+        cod_cliente: '',
+        nombre_c: '',
+        apellidos_c: '',
+        direccion_c: '',
+        telefono_c: '',
+        email_c: '',
+        debe: '',
+
+    
+}
+export const Edit = ({myClient, onEdit}) => {
+    console.log('Elementos: '+myClient);
+    //INICIO EL CLIENTE A VACIO TODO
+    const [client, setClient] = useState(initializedClient);
+    
+    useEffect(() => {
+        setClient(myClient);
+        //CADA VEZ QUE YO CAMBIE MYCLIENT SE ACTUALIZA EL FORMULARIO
+    }, [myClient]);
     //VOY CAMBIANDO EL VALOR CADA VEZ QUE MODIFICO ALGO EN EL FORMULARIO
     const handleInputChange = (event) => {
         console.log(event.target.value);
