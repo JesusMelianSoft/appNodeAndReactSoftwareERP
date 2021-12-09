@@ -348,4 +348,54 @@ app.post('/api/v1/pago', async(req, res) => {
 
     
 })
+
+//OBTENER COMPRAS DEL TACO
+app.get('/api/v1/compras/:cod_user', async(req, res) => {
+    const { cod_user} = req.params;
+    try {
+        console.log("SERVER"+cod_user)
+        const sql = "SELECT * FROM `comprasb` WHERE comprasb.cod_user= ? ";
+        const result = await query(sql, [cod_user]);
+        let message = '';
+        if(result === undefined || result.length === 0) {
+            message = 'Actores table is empty';
+        }else{
+            message = 'Successfully retrieved all actors';
+        }
+
+        res.send({ 
+            error: false,
+            data: result,
+            message: message
+        })
+    } catch (error) {
+        console.log(error);
+        res.resStatus(500);
+    }
+})
+
+app.post('/api/v1/compra/', async(req, res) => {
+    console.log("BODY DE PAGO",req.body);
+    var { codArt, codCli, nombreCli, apellidosCli, nombreArt, precio, cantidad, subtotal, total, cod_user} = req.body;
+
+
+        console.log("MI COMPRA:",req.body);
+        try {
+            const sql = 'INSERT INTO `comprasb`(`codArt`, `codCli`, `nombreCli`, `apellidosCli`, `nombreArt`, `precio`, `cantidad`, `subtotal`, `total`, `fechaCom`, `vista`, `cod_user`) VALUES (?,?,?,?,?,?,?,?,?,CURDATE(),2,?)';
+            console.log('SQL:',sql)
+            const result = await query(sql, [codArt, codCli, nombreCli, apellidosCli, nombreArt, precio, cantidad, subtotal, total, cod_user])
+            console.log('result insertClient: ',result)
+
+            res.send({
+                error: false,
+                data: {total},
+                message: 'Client successfully added with id ' + result.insert_id
+            })
+        } catch (error) {
+            console.log(error);
+            res.sendStatus(500);
+        }
+
+    
+})
 module.exports = { runServer, stopServer };

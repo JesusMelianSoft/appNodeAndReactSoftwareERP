@@ -51,4 +51,15 @@ const aGetPayByUser = (cod_user) => {
     console.log("aGetPayByUser: codUser: ",cod_user);
     return axios.get(`${API_URL}/pagos/${cod_user}`).then((response) => response.data);
 }
-export default {aGetTrabajadorForLogin, aGetTrabajadoresLogin, aGetClients, delClientByCod, aGetClientByCod, aPutClient, aGetDebeClients, aInsertClient, aSearchClients, aInsertPay, aGetPayByUser};
+
+const aGetBuyByUser = (cod_user) => {
+    console.log("aGetBuyByUser: codUser: ",cod_user);
+    return axios.get(`${API_URL}/compras/${cod_user}`).then((response) => response.data);
+}
+
+const aInsertBuy = (buy) => {
+    console.log("aInsertBuy: ",buy)
+    return axios.post(`${API_URL}/compra/`, buy).then((response) => response.data);
+}
+
+export default {aGetTrabajadorForLogin, aGetTrabajadoresLogin, aGetClients, delClientByCod, aGetClientByCod, aPutClient, aGetDebeClients, aInsertClient, aSearchClients, aInsertPay, aGetPayByUser, aGetBuyByUser, aInsertBuy};

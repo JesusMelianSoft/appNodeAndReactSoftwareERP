@@ -7,6 +7,7 @@ import { NavBar } from './Components/NavBar';
 import { Create } from './Components/ClientForm/Create';
 import { Edit} from './Components/ClientForm/Edit';
 import { Pago } from './Components/ClientForm/Pago';
+import { Compra } from './Components/ClientForm/Compra';
 
 function App() {
   const [loged, setLoged] = useState(false);
@@ -18,6 +19,7 @@ function App() {
   const [client, setClient] = useState();
   const [totalTaco, setTotalTaco] = useState(null);
   const [pagosByClient, setPagosByClient] = useState();
+  const [buysByUser, setBuysByUser] = useState();
 
   //PARA COMPROBAR EL LOGIN
   const handleLoged = (bool, cod_user) => {
@@ -127,6 +129,30 @@ function App() {
       setPagosByClient(res.data)
     })
   }
+
+  //FILTRO UNA COMPRA POR CLIENTE Y TRABAJADOR
+  const handleFilterBuy = (cod_client, cod_user) => {
+    console.log("handleFilterBuy cod_client",cod_client, " cod_user: ",cod_user);
+    
+    const filtrar= (cod_client, cod_user) => {
+      const result = buysByUser.filter(compras => {return compras.codCli === cod_client && compras.cod_user === cod_user});
+      //console.log('Result:', result);
+      return result;
+    }
+    const myBuys = filtrar(cod_client, cod_user);
+    console.log("handleFilterBuy",myBuys);
+    //setReload(true);
+    return myBuys;
+    
+  }
+
+  //OBTENGO LAS COMPRAS DE UN TRABAJADOR TRABAJADOR
+  const handleGetBuysByUser = (cod_user) => {
+    bd.aGetBuyByUser(cod_user).then((res) => {
+      console.log("aGetPayByUser", res.data);
+      setBuysByUser(res.data)
+    })
+  }
   //OBTENGO EL TOTAL DEL TACO
   const handleGetDebeClient = () => {
     console.log("ENTRO EN GETDEBECLIENT")
@@ -135,25 +161,7 @@ function App() {
       setTotalTaco(res.data[0].suma);
     })
   }
-  //CARGAR LOS FORMULARIOS DEPENDIENDO DE LA ACCION
-  const handleComponent = () => {
-    console.log(action);
-    if(action === 0){
-      console.log('action 0');
-      return(<Create onInsert={handleInsert} />);
-    }else if(action === 1){
-      console.log('handleComponentEdit: ',client)
-      const myClient = handleFilterEdit(codClient, codUser);
-      return(<Edit myClient={myClient} onEdit={handleEdit} />);
-    }else if(action === 2){
-      const myClient = handleFilterEdit(codClient, codUser);
-      const pagos=handleFilterPay(codClient, codUser);
-      
-      console.log("MIS PAGOS ACTION 2: ",pagos)
-      return(<Pago cliente={myClient} pagos={pagos} onInsertPay={handleInsertPay} cod_user={codUser}/>);
-    }
 
-  }
 
   //INSERTAR PAGOS
   const handleInsertPay = (pay) => {
@@ -166,6 +174,15 @@ function App() {
     //recargo la pagina
     setReload(true);
     setAction(0)
+  }
+
+  //INSERTAR COMPRAS
+  const handleInsertBuy = (buy) => {
+    console.log("APUNTO DE INSERTAR: ", buy)
+    bd.aInsertBuy(buy).then((res) => {
+      window.alert("COMPRA INSERTADA")
+    })
+    setReload(true);
   }
   //BUSQUEDA CLIENTES 
   const handleSearch = (data) => {
@@ -189,6 +206,32 @@ function App() {
   const myClient = filtrarCodCli(cod_client, cod_user);
   return myClient;
   }
+
+    //CARGAR LOS FORMULARIOS DEPENDIENDO DE LA ACCION
+    const handleComponent = () => {
+      console.log(action);
+      if(action === 0){
+        console.log('action 0');
+        return(<Create onInsert={handleInsert} />);
+      }else if(action === 1){
+        console.log('handleComponentEdit: ',client)
+        const myClient = handleFilterEdit(codClient, codUser);
+        return(<Edit myClient={myClient} onEdit={handleEdit} />);
+      }else if(action === 2){
+        const myClient = handleFilterEdit(codClient, codUser);
+        const pagos=handleFilterPay(codClient, codUser);
+        
+        console.log("MIS PAGOS ACTION 2: ",pagos)
+        return(<Pago cliente={myClient} pagos={pagos} onInsertPay={handleInsertPay} cod_user={codUser}/>);
+      }else if(action === 3){
+        const myClient = handleFilterEdit(codClient, codUser);
+        const compras=handleFilterBuy(codClient, codUser);
+        console.log("ACTION 3 MIS COMPRAS",compras);
+        return(<Compra compras={compras} client={myClient} onInsertBuy={handleInsertBuy}/>);
+      }
+  
+    }
+
   //ESTO SIRVE PARA QUE SE CARGE LA PRIMERA VEZ
   useEffect(() => {
     console.log('useEffect, LOGED: ',loged);
@@ -196,6 +239,7 @@ function App() {
     handleGetAllClientByUser(codUser);
     handleGetDebeClient();
     handleGetPaysByUser(codUser);
+    handleGetBuysByUser(codUser);
     setReload(false);
     //le paso una variable, si esta a true, recarga, y si no no recarga
   }, [reload]);
