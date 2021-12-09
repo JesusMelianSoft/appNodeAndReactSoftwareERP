@@ -291,4 +291,88 @@ app.post('/api/v1/client', async(req, res) => {
         res.sendStatus(500);
     }
 })
+
+//OBTENER TOTAL DEL TACO
+app.get('/api/v1/pagos/:cod_user', async(req, res) => {
+    const { cod_user} = req.params;
+    try {
+        console.log("SERVER"+cod_user)
+        const sql = "SELECT * FROM `pagos` WHERE cod_user="+cod_user;
+        const result = await query(sql);
+        let message = '';
+        if(result === undefined || result.length === 0) {
+            message = 'Actores table is empty';
+        }else{
+            message = 'Successfully retrieved all actors';
+        }
+
+        res.send({ 
+            error: false,
+            data: result,
+            message: message
+        })
+    } catch (error) {
+        console.log(error);
+        res.resStatus(500);
+    }
+})
+//OBTENER TOTAL DEL TACO
+app.get('/api/v1/pagosByClient/:cod_user/:cod_client', async(req, res) => {
+    const { cod_user, cod_client} = req.params;
+    try {
+        console.log("SERVER"+cod_user)
+        
+        const sql = "SELECT * FROM `pagos` WHERE cod_user= ? AND cod_cliente_p= ? ";
+        console.log("SQL: ",sql);
+        const result = await query(sql, [cod_user, cod_client]);
+        console.log("RESULT: ",result);
+        let message = '';
+        if(result === undefined || result.length === 0) {
+            message = 'Actores table is empty';
+        }else{
+            message = 'Successfully retrieved all actors';
+        }
+
+        res.send({ 
+            error: false,
+            data: result,
+            message: message
+        })
+    } catch (error) {
+        console.log(error);
+        res.resStatus(500);
+    }
+})
+
+app.post('/api/v1/pago', async(req, res) => {
+    console.log("BODY DE PAGO",req.body);
+    var { cod_cliente, nombre_c, apellidos_c, cantidad_pago, tipo_pago, cod_user} = req.body;
+
+    if(!cod_cliente || !nombre_c) {
+        return res.status(400).send({
+            error: true,
+            message: 'provide actor first_name and last_name'
+        })
+    }
+    if (cantidad_pago!=0) {
+        console.log("MI PAGO:",cod_cliente, nombre_c, apellidos_c, cantidad_pago, tipo_pago);
+        try {
+            const sql = 'INSERT INTO `pagos`(`cod_cliente_p`, `nombre_c_p`, `apellidos_c_p`, `fecha_pago`, `tipo_de_pago`, `cantidad_pago`, `vista`, `cod_user`) VALUES (?,?,?,CURDATE(),?,?,3,?);';
+            console.log('SQL:',sql)
+            const result = await query(sql, [cod_cliente, nombre_c, apellidos_c, tipo_pago, cantidad_pago, cod_user])
+            console.log('result insertClient: ',result)
+
+            res.send({
+                error: false,
+                data: {cod_cliente},
+                message: 'Client successfully added with id ' + result.insert_id
+            })
+        } catch (error) {
+            console.log(error);
+            res.sendStatus(500);
+        }
+    }
+
+    
+})
 module.exports = { runServer, stopServer };

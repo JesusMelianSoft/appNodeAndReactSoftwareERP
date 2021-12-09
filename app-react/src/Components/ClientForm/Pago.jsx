@@ -1,13 +1,23 @@
 import React from 'react'
 import {useState} from "react";
 
-export const Pago = ({cliente, pagos, onInserPay}) => {
+export const Pago = ({cliente, pagos, onInsertPay, cod_user}) => {
 
     const [pay, setPay] = useState('');
     const [methodPay, setMethodPay] = useState("EFECTIVO");
     const handleSubmit = (e) => {
+        console.log(pay);
+        const myPay = {
+            cod_cliente: cliente.cod_cliente, 
+            nombre_c:cliente.nombre_c,
+            apellidos_c:cliente.apellidos_c,
+            cantidad_pago:pay,
+            tipo_pago:methodPay,
+            cod_user: cod_user
+        }
+        console.log("MY PAY: ", myPay);
         e.preventDefault();
-        //onInsertPay(pay, methodPay);
+        onInsertPay(myPay);
     }
     const handleInputChange = (event) => {
         

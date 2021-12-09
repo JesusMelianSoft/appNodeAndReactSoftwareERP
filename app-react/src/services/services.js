@@ -41,4 +41,9 @@ const aInsertClient = (client) => {
 const aSearchClients = (cod_user, dato) => {
     return axios.get(`${API_URL}/clients/${cod_user}/${dato}`).then((response) => response.data);
 }
-export default {aGetTrabajadorForLogin, aGetTrabajadoresLogin, aGetClients, delClientByCod, aGetClientByCod, aPutClient, aGetDebeClients, aInsertClient, aSearchClients};
+
+const aInsertPay = (pay) => {
+    console.log("aInsertPay: ",pay)
+    return axios.post(`${API_URL}/pago/`, pay).then((response) => response.data);
+}
+export default {aGetTrabajadorForLogin, aGetTrabajadoresLogin, aGetClients, delClientByCod, aGetClientByCod, aPutClient, aGetDebeClients, aInsertClient, aSearchClients, aInsertPay};

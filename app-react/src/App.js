@@ -125,11 +125,20 @@ function App() {
     }else if(action === 2){
       const myClient = handleFilterEdit(codClient, codUser);
       
-      return(<Pago cliente={myClient}/>);
+      return(<Pago cliente={myClient} onInsertPay={handleInsertPay} cod_user={codUser}/>);
     }
 
   }
 
+  //INSERTAR PAGOS
+  const handleInsertPay = (pay) => {
+    bd.aInsertPay(pay).then((res) => {
+      window.alert("PAGO INSERTADO");
+    }).catch((err) => {
+      console.log(err);
+      window.alert("PAGO NO INSERTADO");
+    })
+  }
   //BUSQUEDA CLIENTES 
   const handleSearch = (data) => {
     console.log("MIS DATOS: ",data);
