@@ -14,7 +14,6 @@ const initializedClient = {
     
 }
 export const Edit = ({myClient, onEdit}) => {
-    console.log('Elementos: '+myClient);
     //INICIO EL CLIENTE A VACIO TODO
     const [client, setClient] = useState(initializedClient);
     
@@ -22,6 +21,7 @@ export const Edit = ({myClient, onEdit}) => {
         setClient(myClient);
         //CADA VEZ QUE YO CAMBIE MYCLIENT SE ACTUALIZA EL FORMULARIO
     }, [myClient]);
+    
     //VOY CAMBIANDO EL VALOR CADA VEZ QUE MODIFICO ALGO EN EL FORMULARIO
     const handleInputChange = (event) => {
         console.log(event.target.value);

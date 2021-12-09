@@ -6,6 +6,7 @@ import bd from './services/services'
 import { NavBar } from './Components/NavBar';
 import { Create } from './Components/ClientForm/Create';
 import { Edit} from './Components/ClientForm/Edit';
+import { Pago } from './Components/ClientForm/Pago';
 
 function App() {
   const [loged, setLoged] = useState(false);
@@ -121,6 +122,10 @@ function App() {
       console.log('handleComponentEdit: ',client)
       const myClient = handleFilterEdit(codClient, codUser);
       return(<Edit myClient={myClient} onEdit={handleEdit} />);
+    }else if(action === 2){
+      const myClient = handleFilterEdit(codClient, codUser);
+      
+      return(<Pago cliente={myClient}/>);
     }
 
   }
@@ -137,6 +142,7 @@ function App() {
     //setReload(true);
   }
 
+  //FILTRO UN CLIENTE POR CODDE TRABAJADOR Y POR SU CODIGO DE CLIENTE
   const handleFilterEdit = (cod_client, cod_user) => {
     const filtrarCodCli = (cod_client, cod_user) => {
       const result = clients.filter(clients => {return clients.cod_cliente === cod_client && clients.cod_user === cod_user});
