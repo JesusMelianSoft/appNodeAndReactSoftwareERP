@@ -46,4 +46,9 @@ const aInsertPay = (pay) => {
     console.log("aInsertPay: ",pay)
     return axios.post(`${API_URL}/pago/`, pay).then((response) => response.data);
 }
-export default {aGetTrabajadorForLogin, aGetTrabajadoresLogin, aGetClients, delClientByCod, aGetClientByCod, aPutClient, aGetDebeClients, aInsertClient, aSearchClients, aInsertPay};
+
+const aGetPayByUser = (cod_user) => {
+    console.log("aGetPayByUser: codUser: ",cod_user);
+    return axios.get(`${API_URL}/pagos/${cod_user}`).then((response) => response.data);
+}
+export default {aGetTrabajadorForLogin, aGetTrabajadoresLogin, aGetClients, delClientByCod, aGetClientByCod, aPutClient, aGetDebeClients, aInsertClient, aSearchClients, aInsertPay, aGetPayByUser};

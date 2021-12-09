@@ -17,6 +17,7 @@ function App() {
   const [clients, setClients] = useState();
   const [client, setClient] = useState();
   const [totalTaco, setTotalTaco] = useState(null);
+  const [pagosByClient, setPagosByClient] = useState();
 
   //PARA COMPROBAR EL LOGIN
   const handleLoged = (bool, cod_user) => {
@@ -59,7 +60,6 @@ function App() {
         setReload(true);
       }
     }
-
     //OBTENER TODOS LOS CLIENTES DE UN TRABAJADOR
     const handleGetAllClientByUser = (cod_user) => {
       console.log("COD USER PARA BUSCAR CLIENTES: "+cod_user)
@@ -104,6 +104,29 @@ function App() {
     setReload(true);
   }
 
+  //FILTRO UN PAGO POR CLIENTE Y TRABAJADOR
+  const handleFilterPay = (cod_client, cod_user) => {
+    console.log("handleFilterPay cod_client",cod_client, " cod_user: ",cod_user);
+    
+    const filtrar= (cod_client, cod_user) => {
+      const result = pagosByClient.filter(pagos => {return pagos.cod_cliente_p === cod_client && pagos.cod_user === cod_user});
+      //console.log('Result:', result);
+      return result;
+    }
+    const myPays = filtrar(cod_client, cod_user);
+    console.log("handleFilterPay",myPays);
+    //setReload(true);
+    return myPays;
+    
+  }
+
+  //OBTENGO TODOS LOS PAGOS DE UN TRABAJADOR
+  const handleGetPaysByUser = (cod_user) => {
+    bd.aGetPayByUser(cod_user).then((res) => {
+      console.log("aGetPayByUser", res.data);
+      setPagosByClient(res.data)
+    })
+  }
   //OBTENGO EL TOTAL DEL TACO
   const handleGetDebeClient = () => {
     console.log("ENTRO EN GETDEBECLIENT")
@@ -124,8 +147,10 @@ function App() {
       return(<Edit myClient={myClient} onEdit={handleEdit} />);
     }else if(action === 2){
       const myClient = handleFilterEdit(codClient, codUser);
+      const pagos=handleFilterPay(codClient, codUser);
       
-      return(<Pago cliente={myClient} onInsertPay={handleInsertPay} cod_user={codUser}/>);
+      console.log("MIS PAGOS ACTION 2: ",pagos)
+      return(<Pago cliente={myClient} pagos={pagos} onInsertPay={handleInsertPay} cod_user={codUser}/>);
     }
 
   }
@@ -138,6 +163,9 @@ function App() {
       console.log(err);
       window.alert("PAGO NO INSERTADO");
     })
+    //recargo la pagina
+    setReload(true);
+    setAction(0)
   }
   //BUSQUEDA CLIENTES 
   const handleSearch = (data) => {
@@ -155,9 +183,9 @@ function App() {
   const handleFilterEdit = (cod_client, cod_user) => {
     const filtrarCodCli = (cod_client, cod_user) => {
       const result = clients.filter(clients => {return clients.cod_cliente === cod_client && clients.cod_user === cod_user});
-      console.log('Result:', result);
+      //console.log('Result:', result);
       return result[0];
-  }
+    }
   const myClient = filtrarCodCli(cod_client, cod_user);
   return myClient;
   }
@@ -167,6 +195,7 @@ function App() {
     console.log('useEffect, coduser: ',codUser);
     handleGetAllClientByUser(codUser);
     handleGetDebeClient();
+    handleGetPaysByUser(codUser);
     setReload(false);
     //le paso una variable, si esta a true, recarga, y si no no recarga
   }, [reload]);

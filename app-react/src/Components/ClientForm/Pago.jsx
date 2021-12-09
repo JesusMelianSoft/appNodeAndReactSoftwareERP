@@ -2,7 +2,7 @@ import React from 'react'
 import {useState} from "react";
 
 export const Pago = ({cliente, pagos, onInsertPay, cod_user}) => {
-
+    console.log("MIS PAGITOS EN PAGOS:",pagos);
     const [pay, setPay] = useState('');
     const [methodPay, setMethodPay] = useState("EFECTIVO");
     const handleSubmit = (e) => {
@@ -53,15 +53,44 @@ export const Pago = ({cliente, pagos, onInsertPay, cod_user}) => {
                 <div className="form-group">
                     <label for="last_name">Forma de pago</label>
                     <br />
-                    <select name="tipo_pago" onChange={handleInputChange}>
+                    <select className="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="tipo_pago" onChange={handleInputChange}>
                         <option value="EFECTIVO" selected>EFECTIVO</option>
                         <option value="TARJETA">TARJETA</option>
                         <option value="BIZUM">BIZUM</option>
                     </select>
                     <br />
                 </div>
+                <br />
                 <button type="submit" className="btn btn-primary">REGISTRAR PAGO</button>
             </form>
+            <br />
+            <h1 className="text-center">Listado de Pagos</h1>
+            <table className="table table-striped">
+                <thead>
+                    <tr className="bg-dark text-light">
+                        <th>#</th>
+                        <th>Nombre y Apellidos</th>
+                        <th>tipo pago</th>
+                        <th>Cantidad</th>
+                        <th>Fecha(aaaa-mm-dd)</th>
+                    </tr>
+                </thead>
+                    <tbody>
+                        {
+                            pagos.map((pago) => {
+                                return(
+                                    <tr>
+                                        <td>{pago.cod_cliente_p}</td>
+                                        <td>{pago.nombre_c_p+" "+pago.apellidos_c_p}</td>
+                                        <td>{pago.tipo_de_pago}</td>
+                                        <td>{pago.cantidad_pago}</td>
+                                        <td>{pago.fecha_pago.substring(0,10)}</td>
+                                    </tr>                    
+                                );
+                            })
+                        }
+                    </tbody>
+            </table>
         </>
     )
 }

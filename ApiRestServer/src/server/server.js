@@ -316,33 +316,6 @@ app.get('/api/v1/pagos/:cod_user', async(req, res) => {
         res.resStatus(500);
     }
 })
-//OBTENER TOTAL DEL TACO
-app.get('/api/v1/pagosByClient/:cod_user/:cod_client', async(req, res) => {
-    const { cod_user, cod_client} = req.params;
-    try {
-        console.log("SERVER"+cod_user)
-        
-        const sql = "SELECT * FROM `pagos` WHERE cod_user= ? AND cod_cliente_p= ? ";
-        console.log("SQL: ",sql);
-        const result = await query(sql, [cod_user, cod_client]);
-        console.log("RESULT: ",result);
-        let message = '';
-        if(result === undefined || result.length === 0) {
-            message = 'Actores table is empty';
-        }else{
-            message = 'Successfully retrieved all actors';
-        }
-
-        res.send({ 
-            error: false,
-            data: result,
-            message: message
-        })
-    } catch (error) {
-        console.log(error);
-        res.resStatus(500);
-    }
-})
 
 app.post('/api/v1/pago', async(req, res) => {
     console.log("BODY DE PAGO",req.body);
@@ -357,7 +330,7 @@ app.post('/api/v1/pago', async(req, res) => {
     if (cantidad_pago!=0) {
         console.log("MI PAGO:",cod_cliente, nombre_c, apellidos_c, cantidad_pago, tipo_pago);
         try {
-            const sql = 'INSERT INTO `pagos`(`cod_cliente_p`, `nombre_c_p`, `apellidos_c_p`, `fecha_pago`, `tipo_de_pago`, `cantidad_pago`, `vista`, `cod_user`) VALUES (?,?,?,CURDATE(),?,?,3,?);';
+            const sql = 'INSERT INTO `pagos`(`cod_cliente_p`, `nombre_c_p`, `apellidos_c_p`, `fecha_pago`, `tipo_de_pago`, `cantidad_pago`, `vista`, `cod_user`) VALUES (?,?,?,CURDATE(),?,?,2,?);';
             console.log('SQL:',sql)
             const result = await query(sql, [cod_cliente, nombre_c, apellidos_c, tipo_pago, cantidad_pago, cod_user])
             console.log('result insertClient: ',result)
