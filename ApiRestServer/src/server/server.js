@@ -398,4 +398,37 @@ app.post('/api/v1/compra/', async(req, res) => {
 
     
 })
+
+//Delete client by id
+app.delete('/api/v1/pay/:cod_pago/:cod_user', async(req, res) => {
+    const { cod_pago, cod_user} = req.params;
+
+    if(!cod_pago){
+        res.status(400).send({ 
+            error: true,
+            message: 'provide pay id',
+
+        })
+    }
+    try {
+        const sql = "DELETE FROM pagos WHERE cod_pago = ? AND cod_user = ?";
+        const result = await query(sql, [cod_pago, cod_user]);
+        let message = '';
+        
+        if(result.affectedRows === 0) {
+            message = 'Pay is not found';
+        }else{
+            message = 'Pay successfully delete';
+        }
+
+        res.send({
+            error: false,
+            data: {affectedRows: result.affectedRows},
+            message: message
+        })
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+})
 module.exports = { runServer, stopServer };

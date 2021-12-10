@@ -8,6 +8,7 @@ import { Create } from './Components/ClientForm/Create';
 import { Edit} from './Components/ClientForm/Edit';
 import { Pago } from './Components/ClientForm/Pago';
 import { Compra } from './Components/ClientForm/Compra';
+import { PaysList} from './Components/PaysList';
 
 function App() {
   const [loged, setLoged] = useState(false);
@@ -62,6 +63,18 @@ function App() {
         setReload(true);
       }
     }
+
+    //BORRAR PAGO
+  const handleDeletePay = (cod_pago, cod_user) => {
+    const confirm = window.confirm("¿Está seguro que desea eliminar el registro con cod: "+cod_pago+"?");
+      if(confirm){
+        bd.delPayByCod(cod_pago, cod_user).then((res) => {
+          window.alert("Registro con cod: "+ cod_pago + " eliminado correctamente");
+        })
+        setReload(true);
+      }
+    }
+
     //OBTENER TODOS LOS CLIENTES DE UN TRABAJADOR
     const handleGetAllClientByUser = (cod_user) => {
       console.log("COD USER PARA BUSCAR CLIENTES: "+cod_user)
@@ -232,6 +245,17 @@ function App() {
   
     }
 
+    const handleList = () => {
+      if(action===5){
+        return(<PaysList unLogin={handleUnLogin} onAction={handleAction} pays={pagosByClient} onDelete={handleDeletePay}/>);
+      }else if(action === 6){
+
+      }else {
+        console.log("MI ACTION ES 0");
+        return(<ClientList onAction={handleAction} onDelete={handleDeleteClient} cod_user={codUser} clients={clients} unLogin={handleUnLogin} total={totalTaco} onSearch={handleSearch}/>); 
+      }
+    }
+
   //ESTO SIRVE PARA QUE SE CARGE LA PRIMERA VEZ
   useEffect(() => {
     console.log('useEffect, LOGED: ',loged);
@@ -253,7 +277,7 @@ function App() {
     : 
       <div className="d-flex">
         <div className="scrolling" >
-          <ClientList onAction={handleAction} onDelete={handleDeleteClient} cod_user={codUser} clients={clients} unLogin={handleUnLogin} total={totalTaco} onSearch={handleSearch}/> 
+          {handleList()}
         </div>
         <div className="flex-sm-row col-sm-3 p-2 ">
           {handleComponent()}

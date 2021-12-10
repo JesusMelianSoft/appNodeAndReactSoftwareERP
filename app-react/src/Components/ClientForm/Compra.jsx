@@ -40,8 +40,8 @@ export const Compra = ({compras, client, onInsertBuy}) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         //AGREGAMOS SUBTOTAL Y TOTAL
-        buy.total=(parseInt(buy.precio)*parseInt(buy.cantidad));
-        buy.subtotal=(parseInt(buy.precio));
+        buy.total=(parseFloat(buy.precio)*parseFloat(buy.cantidad));
+        buy.subtotal=(parseFloat(buy.precio));
         console.log("ENVIAMOS: ",buy);
         //INSERTAMOS EL TOTAL
         onInsertBuy(buy);
