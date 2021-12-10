@@ -76,8 +76,11 @@ export const Login = ({onLogin}) => {
                     <hr />
                     <div id="error" className="error-login">{msg}</div>
                     <button type="submit" className="btn btn-success">ENTRAR</button>
+                    <br />
+                    
                 </div>
             </form>
+            
         </div>
     )
 }
