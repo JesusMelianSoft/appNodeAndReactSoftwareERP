@@ -297,7 +297,7 @@ app.get('/api/v1/pagos/:cod_user', async(req, res) => {
     const { cod_user} = req.params;
     try {
         console.log("SERVER"+cod_user)
-        const sql = "SELECT * FROM `pagos` WHERE cod_user="+cod_user;
+        const sql = "SELECT * FROM `pagos` WHERE cod_user="+cod_user+" ORDER BY cod_pago DESC";
         const result = await query(sql);
         let message = '';
         if(result === undefined || result.length === 0) {
