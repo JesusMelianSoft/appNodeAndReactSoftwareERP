@@ -58,7 +58,7 @@ export const ClientList = ({ onAction, onDelete, cod_user, clients = [] , unLogi
                                         <td key={client.cod_cliente}>{client.cod_cliente}</td>
                                         <td>{client.nombre_c+" "+client.apellidos_c}</td>
                                         <td>{client.direccion_c}</td>
-                                        <td>{client.debe}</td>
+                                        <td>{client.debe+ "€"}</td>
                                         <td>
                                             <button type="button" className="btn btn-success m-2" id={client.cod_cliente} onClick={() => {onAction(2,client.cod_cliente)}}>PAGO</button>
                                             <button type="button" className="btn btn-success m-2" id={client.cod_cliente} onClick={() => {onAction(3,client.cod_cliente)}}>COMPRA</button>

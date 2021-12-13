@@ -354,7 +354,7 @@ app.get('/api/v1/compras/:cod_user', async(req, res) => {
     const { cod_user} = req.params;
     try {
         console.log("SERVER"+cod_user)
-        const sql = "SELECT * FROM `comprasb` WHERE comprasb.cod_user= ? ";
+        const sql = "SELECT * FROM `comprasb` WHERE comprasb.cod_user= ? ORDER BY codCom DESC";
         const result = await query(sql, [cod_user]);
         let message = '';
         if(result === undefined || result.length === 0) {
@@ -419,6 +419,39 @@ app.delete('/api/v1/pay/:cod_pago/:cod_user', async(req, res) => {
             message = 'Pay is not found';
         }else{
             message = 'Pay successfully delete';
+        }
+
+        res.send({
+            error: false,
+            data: {affectedRows: result.affectedRows},
+            message: message
+        })
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+})
+
+//Delete client by id
+app.delete('/api/v1/buy/:cod_compra/:cod_user', async(req, res) => {
+    const { cod_compra, cod_user} = req.params;
+
+    if(!cod_compra){
+        res.status(400).send({ 
+            error: true,
+            message: 'provide buy id',
+
+        })
+    }
+    try {
+        const sql = "DELETE FROM comprasb WHERE codCom = ? AND cod_user = ?";
+        const result = await query(sql, [cod_compra, cod_user]);
+        let message = '';
+        
+        if(result.affectedRows === 0) {
+            message = 'Buy is not found';
+        }else{
+            message = 'Buy successfully delete';
         }
 
         res.send({

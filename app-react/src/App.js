@@ -9,6 +9,7 @@ import { Edit} from './Components/ClientForm/Edit';
 import { Pago } from './Components/ClientForm/Pago';
 import { Compra } from './Components/ClientForm/Compra';
 import { PaysList} from './Components/PaysList';
+import { BuysList} from './Components/BuysList';
 
 function App() {
   const [loged, setLoged] = useState(false);
@@ -70,6 +71,17 @@ function App() {
       if(confirm){
         bd.delPayByCod(cod_pago, cod_user).then((res) => {
           window.alert("Registro con cod: "+ cod_pago + " eliminado correctamente");
+        })
+        setReload(true);
+      }
+    }
+
+      //BORRAR COMPRA
+  const handleDeleteBuy = (cod_compra, cod_user) => {
+    const confirm = window.confirm("¿Está seguro que desea eliminar el registro con cod: "+cod_compra+"?");
+      if(confirm){
+        bd.delBuyByCod(cod_compra, cod_user).then((res) => {
+          window.alert("Registro con cod: "+ cod_compra + " eliminado correctamente");
         })
         setReload(true);
       }
@@ -249,7 +261,7 @@ function App() {
       if(action===5){
         return(<PaysList unLogin={handleUnLogin} onAction={handleAction} pays={pagosByClient} onDelete={handleDeletePay}/>);
       }else if(action === 6){
-
+        return(<BuysList unLogin={handleUnLogin} onAction={handleAction} buys={buysByUser} onDelete={handleDeleteBuy}/>)
       }else {
         console.log("MI ACTION ES 0");
         return(<ClientList onAction={handleAction} onDelete={handleDeleteClient} cod_user={codUser} clients={clients} unLogin={handleUnLogin} total={totalTaco} onSearch={handleSearch}/>); 
