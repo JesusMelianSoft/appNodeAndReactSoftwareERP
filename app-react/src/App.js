@@ -22,7 +22,8 @@ function App() {
   const [totalTaco, setTotalTaco] = useState(null);
   const [pagosByClient, setPagosByClient] = useState();
   const [buysByUser, setBuysByUser] = useState();
-
+  const [paysWeek, setPaysWeek] = useState();
+  const [buysWeek, setBuysWeek] = useState();
   //PARA COMPROBAR EL LOGIN
   const handleLoged = (bool, cod_user) => {
     setCodUser(cod_user);
@@ -98,6 +99,24 @@ function App() {
       setReload(true);
   }
 
+  const handleGetPaysWeek = (cod_user) => {
+    bd.aGetPaysWeek(cod_user).then((res) => {
+      console.log(res.data);
+      //meto los actores en el array de actores
+      setPaysWeek(res.data);
+      })
+  setReload(true);
+  }
+
+
+  const handleGetBuysWeek = (cod_user) => {
+    bd.aGetBuysWeek(cod_user).then((res) => {
+      console.log(res.data);
+      //meto los actores en el array de actores
+      setBuysWeek(res.data);
+      })
+  setReload(true);
+  }
 
   //EDITAR CLIENTE
   const handleEdit = (client) => {
@@ -232,6 +251,13 @@ function App() {
   return myClient;
   }
 
+  //RESETEAR PAGPOS Y COMPRAS DE LA SEMANA
+  const handleReset = (cod_user) => {
+    bd.aResetBuys(cod_user);
+    bd.aResetPays(cod_user);
+    setReload(true);
+  }
+
     //CARGAR LOS FORMULARIOS DEPENDIENDO DE LA ACCION
     const handleComponent = () => {
       console.log(action);
@@ -264,7 +290,7 @@ function App() {
         return(<BuysList unLogin={handleUnLogin} onAction={handleAction} buys={buysByUser} onDelete={handleDeleteBuy}/>)
       }else {
         console.log("MI ACTION ES 0");
-        return(<ClientList onAction={handleAction} onDelete={handleDeleteClient} cod_user={codUser} clients={clients} unLogin={handleUnLogin} total={totalTaco} onSearch={handleSearch}/>); 
+        return(<ClientList onAction={handleAction} onDelete={handleDeleteClient} cod_user={codUser} clients={clients} unLogin={handleUnLogin} total={totalTaco} onSearch={handleSearch} paysWeek={paysWeek} buysWeek={buysWeek} onReset={handleReset} />); 
       }
     }
 
@@ -276,6 +302,8 @@ function App() {
     handleGetDebeClient();
     handleGetPaysByUser(codUser);
     handleGetBuysByUser(codUser);
+    handleGetBuysWeek(codUser);
+    handleGetPaysWeek(codUser);
     setReload(false);
     //le paso una variable, si esta a true, recarga, y si no no recarga
   }, [reload]);

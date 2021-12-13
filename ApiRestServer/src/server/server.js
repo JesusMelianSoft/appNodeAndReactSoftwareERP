@@ -374,6 +374,106 @@ app.get('/api/v1/compras/:cod_user', async(req, res) => {
     }
 })
 
+//OBTENER COMPRAS DE LA SEMANA
+app.get('/api/v1/comprasWeek/:cod_user', async(req, res) => {
+    const { cod_user} = req.params;
+    try {
+        console.log("SERVER"+cod_user)
+        const sql = "SELECT SUM(total) as total FROM `comprasb` WHERE comprasb.cod_user= ? AND vista = 2 ORDER BY codCom DESC";
+        const result = await query(sql, [cod_user]);
+        let message = '';
+        if(result === undefined || result.length === 0) {
+            message = 'Actores table is empty';
+        }else{
+            message = 'Successfully retrieved all actors';
+        }
+
+        res.send({ 
+            error: false,
+            data: result,
+            message: message
+        })
+    } catch (error) {
+        console.log(error);
+        res.resStatus(500);
+    }
+})
+
+//OBTENER PAGOS DE LA SEMANA
+app.get('/api/v1/pagosWeek/:cod_user', async(req, res) => {
+    const { cod_user} = req.params;
+    try {
+        console.log("SERVER"+cod_user)
+        const sql = "SELECT SUM(cantidad_pago) as total FROM `pagos` WHERE pagos.cod_user= ? AND vista = 2 ORDER BY cod_pago DESC";
+        const result = await query(sql, [cod_user]);
+        let message = '';
+        if(result === undefined || result.length === 0) {
+            message = 'Actores table is empty';
+        }else{
+            message = 'Successfully retrieved all actors';
+        }
+
+        res.send({ 
+            error: false,
+            data: result,
+            message: message
+        })
+    } catch (error) {
+        console.log(error);
+        res.resStatus(500);
+    }
+})
+
+//UPDATE VISTA PAGOS, HACER RESET
+app.get('/api/v1/resetPays/:cod_user', async(req, res) => {
+    const { cod_user} = req.params;
+    try {
+        console.log("SERVER"+cod_user)
+        const sql = "UPDATE `pagos` SET `vista`='3' WHERE cod_user = ?";
+        const result = await query(sql, [cod_user]);
+        let message = '';
+        if(result === undefined || result.length === 0) {
+            message = 'Actores table is empty';
+        }else{
+            message = 'Successfully retrieved all actors';
+        }
+
+        res.send({ 
+            error: false,
+            data: result,
+            message: message
+        })
+    } catch (error) {
+        console.log(error);
+        res.resStatus(500);
+    }
+})
+
+//UPDATE VISTA COMPRAS, HACER RESET
+app.get('/api/v1/resetBuys/:cod_user', async(req, res) => {
+    const { cod_user} = req.params;
+    try {
+        console.log("SERVER"+cod_user)
+        const sql = "UPDATE `comprasb` SET `vista`='3' WHERE cod_user = ?";
+        const result = await query(sql, [cod_user]);
+        let message = '';
+        if(result === undefined || result.length === 0) {
+            message = 'Actores table is empty';
+        }else{
+            message = 'Successfully retrieved all actors';
+        }
+
+        res.send({ 
+            error: false,
+            data: result,
+            message: message
+        })
+    } catch (error) {
+        console.log(error);
+        res.resStatus(500);
+    }
+})
+
 app.post('/api/v1/compra/', async(req, res) => {
     console.log("BODY DE PAGO",req.body);
     var { codArt, codCli, nombreCli, apellidosCli, nombreArt, precio, cantidad, subtotal, total, cod_user} = req.body;

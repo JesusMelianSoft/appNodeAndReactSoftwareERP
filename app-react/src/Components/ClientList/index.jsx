@@ -2,7 +2,7 @@ import React from 'react'
 import {useState, useEffect} from "react";
 import bd from '../../services/services';
 
-export const ClientList = ({ onAction, onDelete, cod_user, clients = [] , unLogin, total, onSearch}) => {
+export const ClientList = ({ onAction, onDelete, cod_user, clients = [] , unLogin, total, onSearch, paysWeek, buysWeek, onReset}) => {
     //OBTENGO TODOS LOS CLIENTES DE CADA EMPLEADO
     const [dato, setDato] = useState(undefined)
     var data;
@@ -27,16 +27,16 @@ export const ClientList = ({ onAction, onDelete, cod_user, clients = [] , unLogi
         <div className="count_box">
             <label>TOTAL VENTAS SEMANA</label>
             <br />
-            <input type="number" disabled />
+            <input type="text" value={buysWeek[0].total+" €"} disabled />
             <br />
             <label>TOTAL COBRO SEMANA</label>
             <br />
-            <input type="number" disabled />
+            <input type="text" value={paysWeek[0].total+" €"} disabled />
             <br />
             <label>TOTAL TACO</label>
             <br />
             <input type="text" value={total+" €"} disabled />
-            <button type="button" className="btn btn-danger m-2" >RESET</button>
+            <button type="button" className="btn btn-danger m-2" onClick={() => {onReset(cod_user)}}>RESET</button>
         </div>
         <br />
         <h1 className="text-center">Listado de Clientes</h1>
