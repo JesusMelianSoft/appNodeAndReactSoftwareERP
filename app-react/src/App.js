@@ -10,6 +10,7 @@ import { Pago } from './Components/ClientForm/Pago';
 import { Compra } from './Components/ClientForm/Compra';
 import { PaysList} from './Components/PaysList';
 import { BuysList} from './Components/BuysList';
+import { Ticket } from './Components/Ticket'
 
 function App() {
   const [loged, setLoged] = useState(false);
@@ -25,6 +26,7 @@ function App() {
   const [paysWeek, setPaysWeek] = useState();
   const [buysWeek, setBuysWeek] = useState();
   const [lastBuys, setLastBuys] = useState();
+  const [buysForTicket, setBuysForTicket] = useState();
 
   //PARA COMPROBAR EL LOGIN
   const handleLoged = (bool, cod_user) => {
@@ -280,6 +282,11 @@ function App() {
     setReload(true);
   }
 
+  const handleBuysForTicket = (buysForTicket) => {
+    setBuysForTicket(buysForTicket);
+    setAction(7);
+    setReload(true);
+  }
     //CARGAR LOS FORMULARIOS DEPENDIENDO DE LA ACCION
     const handleComponent = () => {
       console.log(action);
@@ -298,7 +305,7 @@ function App() {
         const compras=handleFilterBuy(codClient, codUser);
         const ultCompra=handleFilterLastBuy(codClient, codUser);
 
-        return(<Compra compras={compras} client={myClient} onInsertBuy={handleInsertBuy} ultCompra={ultCompra} onAction={handleAction}/>);
+        return(<Compra compras={compras} client={myClient} onInsertBuy={handleInsertBuy} ultCompra={ultCompra} onAction={handleAction} onTicket={handleBuysForTicket} />);
       }
   
     }
@@ -308,7 +315,10 @@ function App() {
         return(<PaysList unLogin={handleUnLogin} onAction={handleAction} pays={pagosByClient} onDelete={handleDeletePay}/>);
       }else if(action === 6){
         return(<BuysList unLogin={handleUnLogin} onAction={handleAction} buys={buysByUser} onDelete={handleDeleteBuy} />)
-      }else {
+      }else if(action === 7){
+        return(<Ticket buys={buysForTicket} />)
+      }
+      else {
         console.log("MI ACTION ES 0");
         return(<ClientList onAction={handleAction} onDelete={handleDeleteClient} cod_user={codUser} clients={clients} unLogin={handleUnLogin} total={totalTaco} onSearch={handleSearch} paysWeek={paysWeek} buysWeek={buysWeek} onReset={handleReset} />); 
       }

@@ -2,7 +2,7 @@ import React from 'react'
 import {useState, useEffect} from "react";
     
 
-export const Compra = ({compras, client, onInsertBuy, ultCompra, onAction}) => {
+export const Compra = ({compras, client, onInsertBuy, ultCompra, onAction, onTicket}) => {
     console.log("COMPRAS CLIENTE:",client);
     
     if(client===undefined){
@@ -31,7 +31,7 @@ export const Compra = ({compras, client, onInsertBuy, ultCompra, onAction}) => {
             setLastBuys(ultCompra);
         },[compras, ultCompra]);
         
-    
+        
         
         const handleInputChange = (event) => {
             
@@ -127,7 +127,7 @@ export const Compra = ({compras, client, onInsertBuy, ultCompra, onAction}) => {
                     </tbody>
             </table>
             <br />
-            <button type="button" >TICKET</button>
+            <button type="button" className="btn btn-secondary m-2" onClick={() => onTicket(lastBuys)}>TICKET</button>
             <br />
             <h1 className="text-center">Listado de Compras</h1>
             <table className="table table-striped">
