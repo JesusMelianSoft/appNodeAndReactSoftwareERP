@@ -374,6 +374,31 @@ app.get('/api/v1/compras/:cod_user', async(req, res) => {
     }
 })
 
+//OBTENER COMPRAS DEL TACO
+app.get('/api/v1/ultCompras/:cod_user', async(req, res) => {
+    const { cod_user} = req.params;
+    try {
+        console.log("SERVER"+cod_user)
+        const sql = "SELECT * FROM `comprasb` WHERE comprasb.cod_user= ? AND comprasb.fechaCom=(SELECT max(fechaCom) FROM comprasb WHERE comprasb.cod_user= ?)";
+        const result = await query(sql, [cod_user, cod_user]);
+        let message = '';
+        if(result === undefined || result.length === 0) {
+            message = 'Actores table is empty';
+        }else{
+            message = 'Successfully retrieved all actors';
+        }
+
+        res.send({ 
+            error: false,
+            data: result,
+            message: message
+        })
+    } catch (error) {
+        console.log(error);
+        res.resStatus(500);
+    }
+})
+
 //OBTENER COMPRAS DE LA SEMANA
 app.get('/api/v1/comprasWeek/:cod_user', async(req, res) => {
     const { cod_user} = req.params;

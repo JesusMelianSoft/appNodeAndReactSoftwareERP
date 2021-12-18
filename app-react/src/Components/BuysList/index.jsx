@@ -1,9 +1,7 @@
 import React from 'react'
-import {useState} from "react";
 
 export const BuysList = ({unLogin, onAction, buys, onDelete}) => {
     //OBTENGO TODOS LOS CLIENTES DE CADA EMPLEADO
-    const [dato, setDato] = useState(undefined)
     var data;
     const handleInputChange = (event) => {
         data=event.target.value

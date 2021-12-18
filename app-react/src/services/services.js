@@ -66,6 +66,11 @@ const aGetBuyByUser = (cod_user) => {
     return axios.get(`${API_URL}/compras/${cod_user}`).then((response) => response.data);
 }
 
+const aGetLastBuyByUser = (cod_user) => {
+    console.log("aGetLastBuyByUser: codUser: ",cod_user);
+    return axios.get(`${API_URL}/ultCompras/${cod_user}`).then((response) => response.data);
+}
+
 const aGetBuysWeek = (cod_user) => {
     console.log('aGetDebeClients'+`${API_URL}/totalDebeClient/${cod_user}`);
     return axios.get(`${API_URL}/comprasWeek/${cod_user}`).then((response) => response.data);
@@ -89,4 +94,4 @@ const aInsertBuy = (buy) => {
     return axios.post(`${API_URL}/compra/`, buy).then((response) => response.data);
 }
 
-export default {aResetPays, aResetBuys, aGetBuysWeek, aGetPaysWeek, delBuyByCod, delPayByCod, aGetTrabajadorForLogin, aGetTrabajadoresLogin, aGetClients, delClientByCod, aGetClientByCod, aPutClient, aGetDebeClients, aInsertClient, aSearchClients, aInsertPay, aGetPayByUser, aGetBuyByUser, aInsertBuy};
+export default {aGetLastBuyByUser, aResetPays, aResetBuys, aGetBuysWeek, aGetPaysWeek, delBuyByCod, delPayByCod, aGetTrabajadorForLogin, aGetTrabajadoresLogin, aGetClients, delClientByCod, aGetClientByCod, aPutClient, aGetDebeClients, aInsertClient, aSearchClients, aInsertPay, aGetPayByUser, aGetBuyByUser, aInsertBuy};

@@ -1,53 +1,69 @@
 import React from 'react'
 import {useState, useEffect} from "react";
-
     
 
-export const Compra = ({compras, client, onInsertBuy}) => {
-    const initialBuy = {
-        codArt: 1,
-        codCli: client.cod_cliente,
-        nombreCli: client.nombre_c,
-        apellidosCli: client.apellidos_c,
-        nombreArt: '',
-        precio: '',
-        cantidad: 1,
-        subtotal: 0,
-        total: 0,
-        cod_user: client.cod_user
+export const Compra = ({compras, client, onInsertBuy, ultCompra, onAction}) => {
+    console.log("COMPRAS CLIENTE:",client);
+    
+    if(client===undefined){
+        console.log("EL CLIENTE ES UNDEFINED");
+        onAction(0);
     }
-    const [buys, setBuys] = useState(compras);
-    const [buy, setBuy] = useState(initialBuy);
-    useEffect(() => {
-        setBuys(compras)
-    },[compras]);
+        const initialBuy = {
+            codArt: 1,
+            codCli: client.cod_cliente,
+            nombreCli: client.nombre_c,
+            apellidosCli: client.apellidos_c,
+            nombreArt: 'VARIOS',
+            precio: '',
+            cantidad: 1,
+            subtotal: 0,
+            total: 0,
+            cod_user: client.cod_user
+        }
+        const [lastBuys, setLastBuys] = useState(initialBuy);
+        const [buys, setBuys] = useState(compras);
+        const [buy, setBuy] = useState(initialBuy);
     
-
-    
-    console.log("ACTION 3 MIS COMPRAS",compras);
-    console.log("ACTION 3 MI CLIENT",client);
-    const handleInputChange = (event) => {
+        useEffect(() => {
+            console.log("USEEFFECT");
+            setBuys(compras);
+            setLastBuys(ultCompra);
+        },[compras, ultCompra]);
         
-        setBuy({
-            ...buy, 
-            [event.target.name]: event.target.value
-        })
-
+    
         
-        console.log("CAMBIO: ",buy);
-    }
+        const handleInputChange = (event) => {
+            
+            setBuy({
+                ...buy, 
+                [event.target.name]: event.target.value
+            })
+            setLastBuys({
+                ...lastBuys,
+                [event.target.name]: event.target.value
+            })
+    
+            
+            console.log("CAMBIO: ",buy);
+        }
+    
+        const handleSubmit = (e) => {
+            e.preventDefault();
+            //AGREGAMOS SUBTOTAL Y TOTAL
+            buy.total=(parseFloat(buy.precio)*parseFloat(buy.cantidad));
+            buy.subtotal=(parseFloat(buy.precio));
+            console.log("ENVIAMOS: ",buy);
+            //INSERTAMOS EL TOTAL
+            if(buy.precio==='' || buy.cantidad==='' || buy.cantidad===null) {
+                window.alert("DEBE INSERTAR PRECIO Y CANTIDAD");
+            }else{
+                onInsertBuy(buy);
+                setBuy(initialBuy);
+            }
+        }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        //AGREGAMOS SUBTOTAL Y TOTAL
-        buy.total=(parseFloat(buy.precio)*parseFloat(buy.cantidad));
-        buy.subtotal=(parseFloat(buy.precio));
-        console.log("ENVIAMOS: ",buy);
-        //INSERTAMOS EL TOTAL
-        onInsertBuy(buy);
-        setBuy(initialBuy);
-    }
-    return (
+        return (
         <>
         <h1 className="text-center">Compra cliente</h1>
             <form className="form-padding border border-dark div-form" onSubmit={handleSubmit}>
@@ -78,6 +94,40 @@ export const Compra = ({compras, client, onInsertBuy}) => {
                 <br />
                 <button type="submit" className="btn btn-primary">AÑADIR</button>
             </form>
+            <br />
+            <h1 className="text-center">Ultima Compra</h1>
+            <table className="table table-striped">
+                <thead>
+                    <tr className="bg-dark text-light">
+                        <th>#</th>
+                        <th>Nombre y Apellidos</th>
+                        <th>precio</th>
+                        <th>nombreArt</th>
+                        <th>cantidad</th>
+                        <th>Total</th>
+                        <th>Fecha(aaaa-mm-dd)</th>
+                    </tr>
+                </thead>
+                    <tbody>
+                    {
+                            ultCompra.map((lastBuy) => {
+                                return(
+                                    <tr>
+                                        <td>{lastBuy.codCli}</td>
+                                        <td>{lastBuy.nombreCli+" "+lastBuy.apellidosCli}</td>
+                                        <td>{lastBuy.nombreArt}</td>
+                                        <td>{lastBuy.cantidad}</td>
+                                        <td>{lastBuy.precio}</td>
+                                        <td>{lastBuy.total}</td>
+                                        <td>{lastBuy.fechaCom.substring(0,10)}</td>
+                                    </tr>                    
+                                );
+                            })
+                        }
+                    </tbody>
+            </table>
+            <br />
+            <button type="button" >TICKET</button>
             <br />
             <h1 className="text-center">Listado de Compras</h1>
             <table className="table table-striped">
@@ -111,7 +161,6 @@ export const Compra = ({compras, client, onInsertBuy}) => {
                     </tbody>
             </table>
         </>
+        )
     
-    
-    )
 }

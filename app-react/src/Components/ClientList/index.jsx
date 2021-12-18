@@ -2,15 +2,22 @@ import React from 'react'
 import {useState, useEffect} from "react";
 import bd from '../../services/services';
 
-export const ClientList = ({ onAction, onDelete, cod_user, clients = [] , unLogin, total, onSearch, paysWeek, buysWeek, onReset}) => {
+export const ClientList = ({ onAction, onDelete, cod_user, clients, unLogin, total, onSearch, paysWeek, buysWeek, onReset}) => {
     //OBTENGO TODOS LOS CLIENTES DE CADA EMPLEADO
+    console.log("CLIENTES DE CLIENT LIST", clients)
     const [dato, setDato] = useState(undefined)
     var data;
     const handleInputChange = (event) => {
         data=event.target.value
         console.log("busqueda: "+data);
         onSearch(data);
+        console.log("HANDLE CHANGE CLIENTES DE CLIENT LIST", clients)
+        if(data==='' || data===null || data===undefined || clients.length===0 || clients===undefined || clients===null) {
+            onAction(0);
+        }
+        onAction(0);
     }
+
     return (
         <>
         

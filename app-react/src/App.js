@@ -24,6 +24,8 @@ function App() {
   const [buysByUser, setBuysByUser] = useState();
   const [paysWeek, setPaysWeek] = useState();
   const [buysWeek, setBuysWeek] = useState();
+  const [lastBuys, setLastBuys] = useState();
+
   //PARA COMPROBAR EL LOGIN
   const handleLoged = (bool, cod_user) => {
     setCodUser(cod_user);
@@ -44,9 +46,14 @@ function App() {
     if(action === 1){
       handleEditClient(cod_client);
     }
+    //REINICIAMOS SALVO CADA VEZ QUE BUSCO UN REGISTRO
+    if(action!=0){
+      setReload(true);
+    }
     setCodClient(cod_client)
     setAction(action);
-    setReload(true);
+    console.log("CAMBIAMOS LO ANTERIOR")
+    
   }
 
 
@@ -143,7 +150,6 @@ function App() {
       debe: client.debe,
       cod_user: codUser
     }
-    console.log("FINALCLIENT", finalClient);
     bd.aInsertClient(finalClient).then((res) => {
       console.log("SE HA INSERTADO CORRECTAMENTE")
     })
@@ -152,8 +158,6 @@ function App() {
 
   //FILTRO UN PAGO POR CLIENTE Y TRABAJADOR
   const handleFilterPay = (cod_client, cod_user) => {
-    console.log("handleFilterPay cod_client",cod_client, " cod_user: ",cod_user);
-    
     const filtrar= (cod_client, cod_user) => {
       const result = pagosByClient.filter(pagos => {return pagos.cod_cliente_p === cod_client && pagos.cod_user === cod_user});
       //console.log('Result:', result);
@@ -174,10 +178,16 @@ function App() {
     })
   }
 
+  //OBTENGO LAS ULTIMAS COMPRAS DEL TRABAJADOR
+  const handleGetLastBuysByUser = (cod_user) => {
+    bd.aGetLastBuyByUser(cod_user).then((res) => {
+        console.log("aGetLastBuysByUser", res.data);
+        setLastBuys(res.data);
+    })
+}
+
   //FILTRO UNA COMPRA POR CLIENTE Y TRABAJADOR
   const handleFilterBuy = (cod_client, cod_user) => {
-    console.log("handleFilterBuy cod_client",cod_client, " cod_user: ",cod_user);
-    
     const filtrar= (cod_client, cod_user) => {
       const result = buysByUser.filter(compras => {return compras.codCli === cod_client && compras.cod_user === cod_user});
       //console.log('Result:', result);
@@ -190,6 +200,21 @@ function App() {
     
   }
 
+    //FILTRO UNA COMPRA POR CLIENTE Y TRABAJADOR
+    const handleFilterLastBuy = (cod_client, cod_user) => {
+      console.log("handleFilterBuy cod_client",cod_client, " cod_user: ",cod_user);
+      
+      const filtrar= (cod_client, cod_user) => {
+        const result = lastBuys.filter(compras=> {return compras.codCli === cod_client && compras.cod_user === cod_user});
+        //console.log('Result:', result);
+        return result;
+      }
+      const myBuys = filtrar(cod_client, cod_user);
+      //setReload(true);
+      return myBuys;
+      
+    }
+  
   //OBTENGO LAS COMPRAS DE UN TRABAJADOR TRABAJADOR
   const handleGetBuysByUser = (cod_user) => {
     bd.aGetBuyByUser(cod_user).then((res) => {
@@ -199,9 +224,7 @@ function App() {
   }
   //OBTENGO EL TOTAL DEL TACO
   const handleGetDebeClient = () => {
-    console.log("ENTRO EN GETDEBECLIENT")
     bd.aGetDebeClients(codUser).then((res) => {
-      console.log('TOTAL: ',res.data[0].suma);
       setTotalTaco(res.data[0].suma);
     })
   }
@@ -217,12 +240,11 @@ function App() {
     })
     //recargo la pagina
     setReload(true);
-    setAction(0)
   }
 
   //INSERTAR COMPRAS
   const handleInsertBuy = (buy) => {
-    console.log("APUNTO DE INSERTAR: ", buy)
+    console.log(client);
     bd.aInsertBuy(buy).then((res) => {
       window.alert("COMPRA INSERTADA")
     })
@@ -262,23 +284,21 @@ function App() {
     const handleComponent = () => {
       console.log(action);
       if(action === 0){
-        console.log('action 0');
         return(<Create onInsert={handleInsert} />);
       }else if(action === 1){
-        console.log('handleComponentEdit: ',client)
         const myClient = handleFilterEdit(codClient, codUser);
         return(<Edit myClient={myClient} onEdit={handleEdit} />);
       }else if(action === 2){
         const myClient = handleFilterEdit(codClient, codUser);
         const pagos=handleFilterPay(codClient, codUser);
         
-        console.log("MIS PAGOS ACTION 2: ",pagos)
         return(<Pago cliente={myClient} pagos={pagos} onInsertPay={handleInsertPay} cod_user={codUser}/>);
       }else if(action === 3){
         const myClient = handleFilterEdit(codClient, codUser);
         const compras=handleFilterBuy(codClient, codUser);
-        console.log("ACTION 3 MIS COMPRAS",compras);
-        return(<Compra compras={compras} client={myClient} onInsertBuy={handleInsertBuy}/>);
+        const ultCompra=handleFilterLastBuy(codClient, codUser);
+
+        return(<Compra compras={compras} client={myClient} onInsertBuy={handleInsertBuy} ultCompra={ultCompra} onAction={handleAction}/>);
       }
   
     }
@@ -287,7 +307,7 @@ function App() {
       if(action===5){
         return(<PaysList unLogin={handleUnLogin} onAction={handleAction} pays={pagosByClient} onDelete={handleDeletePay}/>);
       }else if(action === 6){
-        return(<BuysList unLogin={handleUnLogin} onAction={handleAction} buys={buysByUser} onDelete={handleDeleteBuy}/>)
+        return(<BuysList unLogin={handleUnLogin} onAction={handleAction} buys={buysByUser} onDelete={handleDeleteBuy} />)
       }else {
         console.log("MI ACTION ES 0");
         return(<ClientList onAction={handleAction} onDelete={handleDeleteClient} cod_user={codUser} clients={clients} unLogin={handleUnLogin} total={totalTaco} onSearch={handleSearch} paysWeek={paysWeek} buysWeek={buysWeek} onReset={handleReset} />); 
@@ -304,6 +324,7 @@ function App() {
     handleGetBuysByUser(codUser);
     handleGetBuysWeek(codUser);
     handleGetPaysWeek(codUser);
+    handleGetLastBuysByUser(codUser);
     setReload(false);
     //le paso una variable, si esta a true, recarga, y si no no recarga
   }, [reload]);
@@ -315,6 +336,7 @@ function App() {
     ? 
       <Login onLogin={handleLoged}/> 
     : 
+    //AQUI IRIA LA BARRA DE HERRAMIENTAS
       <div className="d-flex">
         <div className="scrolling" >
           {handleList()}
