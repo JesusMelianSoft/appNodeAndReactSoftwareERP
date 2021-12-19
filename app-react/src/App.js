@@ -27,7 +27,7 @@ function App() {
   const [buysWeek, setBuysWeek] = useState();
   const [lastBuys, setLastBuys] = useState();
   const [buysForTicket, setBuysForTicket] = useState();
-
+  const [designed, setDesigned] = useState(true);
   //PARA COMPROBAR EL LOGIN
   const handleLoged = (bool, cod_user) => {
     setCodUser(cod_user);
@@ -285,6 +285,7 @@ function App() {
   const handleBuysForTicket = (buysForTicket) => {
     setBuysForTicket(buysForTicket);
     setAction(7);
+    setDesigned(false);
     setReload(true);
   }
     //CARGAR LOS FORMULARIOS DEPENDIENDO DE LA ACCION
@@ -341,7 +342,7 @@ function App() {
   
   return (
     <>
-    <NavBar title="DECORACIONES ANGEL E HIJAS"/>
+    <NavBar title="DECORACIONES ANGEL E HIJAS" designed={designed}/>
     { !loged 
     ? 
       <Login onLogin={handleLoged}/> 
