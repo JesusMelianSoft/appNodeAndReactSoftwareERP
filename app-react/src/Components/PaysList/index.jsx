@@ -10,6 +10,7 @@ export const PaysList = ({unLogin, onAction, pays, onDelete}) => {
         console.log("busqueda: "+data);
         //onSearchPay(data);
     }
+    
     return (
         <>
         

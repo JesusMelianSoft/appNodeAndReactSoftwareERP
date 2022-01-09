@@ -16,8 +16,10 @@ export const Pago = ({cliente, pagos, onInsertPay, cod_user}) => {
             cod_user: cod_user
         }
         console.log("MY PAY: ", myPay);
+        const newDebe = cliente.debe-myPay.cantidad_pago;
         e.preventDefault();
         onInsertPay(myPay);
+        window.alert("El cliente ahora debe: "+newDebe);
     }
     const handleInputChange = (event) => {
         

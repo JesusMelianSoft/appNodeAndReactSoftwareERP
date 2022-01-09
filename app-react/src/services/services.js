@@ -94,4 +94,9 @@ const aInsertBuy = (buy) => {
     return axios.post(`${API_URL}/compra/`, buy).then((response) => response.data);
 }
 
-export default {aGetLastBuyByUser, aResetPays, aResetBuys, aGetBuysWeek, aGetPaysWeek, delBuyByCod, delPayByCod, aGetTrabajadorForLogin, aGetTrabajadoresLogin, aGetClients, delClientByCod, aGetClientByCod, aPutClient, aGetDebeClients, aInsertClient, aSearchClients, aInsertPay, aGetPayByUser, aGetBuyByUser, aInsertBuy};
+const aGetStatsBuys = () => {
+    console.log('aGetStatsBuys'+`${API_URL}/stats/buys`);
+    return axios.get(`${API_URL}/stats/buys`).then((response) => response.data);
+}
+
+export default {aGetStatsBuys, aGetLastBuyByUser, aResetPays, aResetBuys, aGetBuysWeek, aGetPaysWeek, delBuyByCod, delPayByCod, aGetTrabajadorForLogin, aGetTrabajadoresLogin, aGetClients, delClientByCod, aGetClientByCod, aPutClient, aGetDebeClients, aInsertClient, aSearchClients, aInsertPay, aGetPayByUser, aGetBuyByUser, aInsertBuy};

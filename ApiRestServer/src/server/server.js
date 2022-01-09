@@ -333,7 +333,7 @@ app.post('/api/v1/pago', async(req, res) => {
             const sql = 'INSERT INTO `pagos`(`cod_cliente_p`, `nombre_c_p`, `apellidos_c_p`, `fecha_pago`, `tipo_de_pago`, `cantidad_pago`, `vista`, `cod_user`) VALUES (?,?,?,CURDATE(),?,?,2,?);';
             console.log('SQL:',sql)
             const result = await query(sql, [cod_cliente, nombre_c, apellidos_c, tipo_pago, cantidad_pago, cod_user])
-            console.log('result insertClient: ',result)
+            console.log('result insertPay: ',result)
 
             res.send({
                 error: false,
@@ -587,6 +587,31 @@ app.delete('/api/v1/buy/:cod_compra/:cod_user', async(req, res) => {
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
+    }
+})
+
+//ESTADISTICAS 
+//OBTENER COMPRAS DE LA SEMANA
+app.get('/api/v1/stats/buys', async(req, res) => {
+    try {
+        console.log("SERVER");
+        const sql = "SELECT * FROM comprasb ORDER BY cod_user ASC";
+        const result = await query(sql);
+        let message = '';
+        if(result === undefined || result.length === 0) {
+            message = 'comprasb table is empty';
+        }else{
+            message = 'Successfully retrieved all actors';
+        }
+
+        res.send({ 
+            error: false,
+            data: result,
+            message: message
+        })
+    } catch (error) {
+        console.log(error);
+        res.resStatus(500);
     }
 })
 module.exports = { runServer, stopServer };

@@ -58,7 +58,9 @@ export const Compra = ({compras, client, onInsertBuy, ultCompra, onAction, onTic
             if(buy.precio==='' || buy.cantidad==='' || buy.cantidad===null) {
                 window.alert("DEBE INSERTAR PRECIO Y CANTIDAD");
             }else{
+                const newDebe = client.debe+buy.total;
                 onInsertBuy(buy);
+                window.alert("El cliente ahora debe: "+newDebe);
                 setBuy(initialBuy);
             }
         }

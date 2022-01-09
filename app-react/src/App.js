@@ -11,6 +11,7 @@ import { Compra } from './Components/ClientForm/Compra';
 import { PaysList} from './Components/PaysList';
 import { BuysList} from './Components/BuysList';
 import { Ticket } from './Components/Ticket'
+import { Stats } from './Components/Stats';
 
 function App() {
   const [loged, setLoged] = useState(false);
@@ -28,6 +29,7 @@ function App() {
   const [lastBuys, setLastBuys] = useState();
   const [buysForTicket, setBuysForTicket] = useState();
   const [designed, setDesigned] = useState(true);
+  const [allBuys, setAllBuys] = useState();
   //PARA COMPROBAR EL LOGIN
   const handleLoged = (bool, cod_user) => {
     setCodUser(cod_user);
@@ -224,6 +226,9 @@ function App() {
       setBuysByUser(res.data)
     })
   }
+
+  
+
   //OBTENGO EL TOTAL DEL TACO
   const handleGetDebeClient = () => {
     bd.aGetDebeClients(codUser).then((res) => {
@@ -288,6 +293,15 @@ function App() {
     setDesigned(false);
     setReload(true);
   }
+
+  //OBTENGO LAS STADISTICAS DE LA EMPRESA
+  const handleGetStatsBuys = () => {
+    bd.aGetStatsBuys().then((res) => {
+        console.log("aGetStatsBuys", res.data);
+        setAllBuys(res.data);
+    })
+}
+
     //CARGAR LOS FORMULARIOS DEPENDIENDO DE LA ACCION
     const handleComponent = () => {
       console.log(action);
@@ -318,6 +332,9 @@ function App() {
         return(<BuysList unLogin={handleUnLogin} onAction={handleAction} buys={buysByUser} onDelete={handleDeleteBuy} />)
       }else if(action === 7){
         return(<Ticket buys={buysForTicket} />)
+      }else if(action === 8){
+        console.log("action 8 allbuys: ", allBuys)
+        return(<Stats buys={allBuys}/>)
       }
       else {
         console.log("MI ACTION ES 0");
@@ -336,6 +353,7 @@ function App() {
     handleGetBuysWeek(codUser);
     handleGetPaysWeek(codUser);
     handleGetLastBuysByUser(codUser);
+    handleGetStatsBuys();
     setReload(false);
     //le paso una variable, si esta a true, recarga, y si no no recarga
   }, [reload]);

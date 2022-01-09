@@ -28,7 +28,8 @@ export const ClientList = ({ onAction, onDelete, cod_user, clients, unLogin, tot
                 <br />
                 <input type="text" placeholder="Introduzca un nombre o un codigo" onChange={handleInputChange} value={data}/>
                 <button type="button" className="btn btn-success m-2" onClick={() => {onAction(5,null)}}>PAGOS</button>
-                <button type="button" className="btn btn-success m-2" onClick={() => {onAction(6,null)}}>COMPRAS</button>            
+                <button type="button" className="btn btn-success m-2" onClick={() => {onAction(6,null)}}>COMPRAS</button>   
+                {cod_user === 1 ? <button type="button" className="btn btn-success m-2" onClick={() => {onAction(8,null)}}>ESTADÍSTICAS</button> : null}        
             </form>
         </div>
         <div className="count_box">
